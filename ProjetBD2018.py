@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.ext.mysql import MySQL
 
 app = Flask(__name__)
@@ -19,9 +19,11 @@ cursor = conn.cursor()
 @app.route('/')
 @app.route('/<name>')
 def hello(name=None):
-    cursor.execute('''SELECT * FROM test''')
-    data = cursor.fetchall()
-    return render_template('index.html', name=name, data=data)
+    # cursor.execute('''SELECT * FROM test''')
+    # data = cursor.fetchall()
+    n = request.args.get("n")
+    data = [["IPA", "IPA du nord est"], ["Blanche", "Blanche de Chambly"]]
+    return render_template('index.html', name=name, data=data, id=n)
 
 
 if __name__ == '__main__':
