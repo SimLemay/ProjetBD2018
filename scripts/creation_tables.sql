@@ -18,8 +18,13 @@ CREATE TABLE Utilisateur (
     age INTEGER,
     adresse VARCHAR(200),
     telephone CHAR(11),
-    mot_de_passe BINARY(64),
-    nom_utilisateur VARCHAR(100)
+    courriel VARCHAR(100),
+    prenom VARCHAR(100)
+);
+
+CREATE TABLE Mot_de_passe (
+    id_utilisateur INTEGER PRIMARY KEY,
+    mot_de_passe BINARY(64)
 );
 
 CREATE TABLE Acheteur (

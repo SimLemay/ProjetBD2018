@@ -3,3 +3,4 @@
 /lib
 /.idea
 pip-selfcheck.json
+*.pyc

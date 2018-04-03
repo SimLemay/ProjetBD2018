@@ -1,52 +1,51 @@
-from flask import Flask, render_template, request, redirect, abort
-from flaskext.mysql import MySQL
+from flask import Flask, render_template, request, redirect
+import hashlib
+import re
+from util import util_bd as bd
 
 app = Flask(__name__)
-
-mysql = MySQL()
-
-# MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'projetbduser'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'gUPqV1qOGG4jVcn4Ab8uuPeiCV42Pm4N4Eh1hJ7SUVctzeH7cbep1EMRUVmUGNnv'
-app.config['MYSQL_DATABASE_DB'] = 'ProjetBD'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-mysql.init_app(app)
-
-conn = mysql.connect()
-cursor = conn.cursor()
+utilisateur_courant = {}
 
 
 @app.route('/')
-@app.route('/<name>')
-def hello(name=None):
-    cursor.execute('''SELECT id, nom FROM Biere''')
-    bieres = cursor.fetchall()
-    n = request.args.get("n")
-    return render_template('index.html', name=name, bieres=bieres, id=n)
+def accueil():
+    requete = 'SELECT id, nom FROM Biere'
+    bieres = bd.execute_requete_lecture(requete, fetchall=True)
+    return render_template('accueil.html', bieres=bieres, utilisateur_courant=utilisateur_courant)
 
 
-@app.route('/login', methods=['GET'])
-def afficher_login():
-    print('afficher login')
+@app.route('/connexion', methods=['GET'])
+def afficher_connexion():
     return render_template('login.html')
 
 
-@app.route('/login', methods=['POST'])
-def login():
-    pwd = request.form['password']
+@app.route('/connexion', methods=['POST'])
+def connexion():
+    global utilisateur_courant
+    courriel = request.form.get('courriel')
+    mot_de_passe = request.form['mot_de_passe']
+    if courriel is not None and mot_de_passe is not None and len(courriel) <= 100 and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
+        requete = 'SELECT id_utilisateur, mot_de_passe FROM Mot_de_passe WHERE id_utilisateur IN (SELECT id FROM Utilisateur WHERE courriel=' + '"' + courriel + '"' + ');'
+        row = bd.execute_requete_lecture(requete)
+        if row is not None:
+            id_, hash_bd = row
+            if hash_bd is not None and hash_bd == hashlib.sha512(mot_de_passe.encode('utf-8')).digest():
+                requete = 'SELECT nom, prenom FROM Utilisateur WHERE id=' + str(id_) + ';'
+                row = bd.execute_requete_lecture(requete)
+                if row is not None:
+                    nom, prenom = row
+                    utilisateur_courant['nom'] = nom
+                    utilisateur_courant['prenom'] = prenom
+                    return redirect('/')
+    return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide")
 
-    print(request.form['username'])
-    print(pwd) # hehehe
-    print(request.form['remember'])
-    if pwd == "FindMyPassword":
-        return redirect("/", code=302)
-    abort(401)
 
-
-@app.errorhandler(401)
-def error(e):
-    return render_template("error.html"), 401
+@app.route('/deconnexion')
+def deconnexion():
+    global utilisateur_courant
+    utilisateur_courant = {}
+    return redirect('/')
 
 
 if __name__ == '__main__':
-    app.run() #debug=True
+    app.run(ssl_context=('ssl/cert.pem', 'ssl/key.pem'))  # debug=True
