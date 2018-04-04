@@ -46,6 +46,10 @@ def deconnexion():
     utilisateur_courant = {}
     return redirect('/')
 
+@app.route('/recherche')
+def recherche():
+    return render_template('search.html')
+
 
 if __name__ == '__main__':
     app.run(ssl_context=('ssl/cert.pem', 'ssl/key.pem'))  # debug=True
