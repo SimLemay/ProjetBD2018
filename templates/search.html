@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recherche</title>
+</head>
+<body>
+<h1>Trouver les bieres et les microbrasseries qui vous interessent!</h1>
+<form action="/recherche" method="get" name="recherche">
+    <div>
+        Selectionner le type de recherche: <br>
+        <input type="radio" name="choix" value="biere"> Biere
+        <input type="radio" name="choix" value="microbrasserie"> Microbrasserie <br>
+        <input type="text" placeholder="Hmm">
+        <input type="submit" value="Valider">
+    </div>
+    <div>
+
+        <p> En fonction du type biere: </p>
+        <input list="Typedebiere">
+        <datalist id="Typedebiere">
+            <option value="Blonde">
+            <option value="Blanche">
+            <option value="Rousse">
+            <option value="Brune">
+            <option value="Noire">
+            <option value="IPA">
+        </datalist>
+        <input type="submit" value="Valider">
+    </div>
+</form>
+
+</body>
+</html>
