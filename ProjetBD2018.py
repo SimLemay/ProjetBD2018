@@ -48,4 +48,4 @@ def deconnexion():
 
 
 if __name__ == '__main__':
-    app.run(ssl_context=('ssl/cert.pem', 'ssl/key.pem'))  # debug=True
+    app.run(debug=True, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))
