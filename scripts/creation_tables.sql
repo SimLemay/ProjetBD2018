@@ -54,7 +54,7 @@ CREATE TABLE Biere (
     prix FLOAT(2),
     nom VARCHAR(100),
     pourcentage_alcool FLOAT(1),
-    ibu FLOAT(1),
+    ibu INTEGER,
     annee_production INTEGER,
     mention VARCHAR(200),
     id_microbrasserie INTEGER NOT NULL,
