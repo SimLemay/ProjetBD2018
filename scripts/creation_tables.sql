@@ -60,10 +60,13 @@ CREATE TABLE Biere (
     id_microbrasserie INTEGER NOT NULL,
     date_ajout DATE,
     id_liste_ingredients INTEGER NOT NULL,
+    id_sorte INTEGER NOT NULL,
     FOREIGN KEY (id_microbrasserie)
         REFERENCES Microbrasserie (id_utilisateur),
     FOREIGN KEY (id_liste_ingredients)
-        REFERENCES Liste_ingredients (id)
+        REFERENCES Liste_ingredients (id),
+    FOREIGN KEY (id_sorte)
+        REFERENCES Sorte(id)
 );
 
 CREATE TABLE Achete (

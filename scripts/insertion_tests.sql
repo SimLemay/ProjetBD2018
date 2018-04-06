@@ -1,8 +1,10 @@
 INSERT INTO Microbrasserie(id_utilisateur, nom) VALUES(1, 'Boreale');
 INSERT INTO Ingredient(id, nom) VALUES(1, 'Houblon');
 INSERT INTO Liste_ingredients(id, id_ingredient) VALUES(1, 1);
-INSERT INTO Biere(id, nom, id_microbrasserie, id_liste_ingredients) VALUES(1, 'IPA du Nord-Est', 1, 1);
-INSERT INTO Biere(id, nom, id_microbrasserie, id_liste_ingredients) VALUES(2, 'Boreale IPA', 1, 1);
+INSERT INTO Sorte(id, aromes, nom) VALUES(1, 'Houblon houblonné', 'IPA');
+
+INSERT INTO Biere(id, nom, id_microbrasserie, id_liste_ingredients, id_sorte) VALUES(1, 'IPA du Nord-Est', 1, 1, 1);
+INSERT INTO Biere(id, nom, id_microbrasserie, id_liste_ingredients, id_sorte) VALUES(2, 'Boreale IPA', 1, 1, 1);
 
 insert into Utilisateur(id, courriel, nom, prenom) values(1, 'simon@test.ca', 'Lemay-Lauziere', 'Simon');
 insert into Utilisateur(id, courriel, nom, prenom) values(2, 'keven@ulaval.ca', 'Lamontagne', 'Keven');
