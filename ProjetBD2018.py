@@ -50,6 +50,13 @@ def deconnexion():
 def recherche():
     return render_template('search.html')
 
+@app.route('/affichage')
+def barre_navigation():
+    requete = 'SELECT id, nom FROM Sorte WHERE Sorte.id NOT IN (SELECT id_sorte_enfant FROM Type_de);'
+    sorte = bd.execute_requete_lecture(requete, fetchall=True)
+    #requete2 = 'SELECT nom FROM Sorte WHERE Sorte.id = (SELECT id_sorte_enfant FROM Type_de GROUP BY id_sorte_parent)'
+    #type_sorte = bd.execute_requete_lecture(requete2, fetchall=True)
+    render_template('affichage.html', sorte=sorte)
 
 if __name__ == '__main__':
     app.run(debug=True, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))
