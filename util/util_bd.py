@@ -7,6 +7,7 @@ def open_connection_and_cursor(obtenir_dict=False):
                            user='projetbduser',
                            password='gUPqV1qOGG4jVcn4Ab8uuPeiCV42Pm4N4Eh1hJ7SUVctzeH7cbep1EMRUVmUGNnv',
                            db='ProjetBD',
+                           charset='utf8',
                            **arg_cursorclass)
     cursor = conn.cursor()
     return conn, cursor
