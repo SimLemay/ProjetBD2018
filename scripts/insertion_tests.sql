@@ -216,6 +216,7 @@ INSERT INTO Sorte VALUES(92, '', 'Pumpkin Beer');
 INSERT INTO Sorte VALUES(93, '', 'Rye Beer');
 INSERT INTO Sorte VALUES(94, '', 'Smoke Beer');
 INSERT INTO Sorte VALUES(95, '', 'Specialty Beer');
+INSERT INTO Sorte VALUES(96, '', 'Grisette');
 
 INSERT INTO Type_de VALUES(15, 84);
 INSERT INTO Type_de VALUES(15, 86);
@@ -228,34 +229,35 @@ INSERT INTO Type_de VALUES(15, 92);
 INSERT INTO Type_de VALUES(15, 93);
 INSERT INTO Type_de VALUES(15, 94);
 INSERT INTO Type_de VALUES(15, 95);
+INSERT INTO Type_de VALUES(15, 96);
 
 -- Ajout de bieres
-INSERT INTO Biere VALUES(1, '', 20.00,'Cyclope Kappa IPA', 5.7, 60, 2018, '', 1, '2018-04-06', 1);
-INSERT INTO Biere VALUES(2, '', 15.00, 'Supermoine Numéro 4', 4.5, NULL, 2018, '', 1, '2018-04-06', 1);
-INSERT INTO Biere VALUES(3, '', 15.00, 'Saison du Pinacle', 6.5, 52, 2018, '', 1, '2018-04-06', 1);
-INSERT INTO Biere VALUES(4, '', 15.00, 'Berliner Melon Weisse', 3.9, 8, 2018, '', 1, '2018-04-06', 1);
-INSERT INTO Biere VALUES(5, '', 15.00, 'LaBatt Porter Robuste', 6.0, 51, 2018, '', 1, '2018-04-06', 1);
+INSERT INTO Biere VALUES(1, '', 20.00,'Leo\'s Early Breakfast IPA', 6.2, 54, 2018, '', 1, '2018-04-06', 30);
+INSERT INTO Biere VALUES(2, '', 15.00, 'Supermoine Numéro 4', 4.5, NULL, 2018, '', 1, '2018-04-06', 46);
+INSERT INTO Biere VALUES(3, '', 15.00, 'Saison du Pinacle', 6.5, 52, 2018, '', 1, '2018-04-06', 16);
+INSERT INTO Biere VALUES(4, '', 15.00, 'Berliner Melon Weisse', 3.9, 8, 2018, '', 1, '2018-04-06', 37);
+INSERT INTO Biere VALUES(5, '', 15.00, 'LaBatt Porter Robuste', 6.0, 51, 2018, '', 1, '2018-04-06', 60);
 
-INSERT INTO Biere VALUES(6, '', 10.00, 'IPA Américaine des Appalaches', 7.0, 77, 2018, '', 2, '2018-04-06', 1);
-INSERT INTO Biere VALUES(7, '', 10.00, 'La Blonde de l\'Anse', 5.0, 17, 2018, '', 2, '2018-04-06', 1);
-INSERT INTO Biere VALUES(8, '', 10.00, 'Brown Ale Américaine', 7.0, 90, 2018, '', 2, '2018-04-06', 1);
-INSERT INTO Biere VALUES(9, '', 10.00, 'La Bonne Aventure', 5.0, 25, 2018, '', 2, '2018-04-06', 1);
-INSERT INTO Biere VALUES(10, '', 10.00, 'Gose IPA du Barachois', 3.8, 30, 2018, '', 2, '2018-04-06', 1);
+INSERT INTO Biere VALUES(6, '', 10.00, 'IPA Américaine des Appalaches', 7.0, 77, 2018, '', 2, '2018-04-06', 30);
+INSERT INTO Biere VALUES(7, '', 10.00, 'La Blonde de l\'Anse', 5.0, 17, 2018, '', 2, '2018-04-06', 46);
+INSERT INTO Biere VALUES(8, '', 10.00, 'Brown Ale Américaine', 7.0, 90, 2018, '', 2, '2018-04-06', 27);
+INSERT INTO Biere VALUES(9, '', 10.00, 'La Bonne Aventure', 5.0, 25, 2018, '', 2, '2018-04-06', 75);
+INSERT INTO Biere VALUES(10, '', 10.00, 'Gose IPA du Barachois', 3.8, 30, 2018, '', 2, '2018-04-06', 78);
 
-INSERT INTO Biere VALUES(11, '', 8.00, 'Double Fruit Punch IPA', 8.0, 100, 2018, '', 3, '2018-04-06', 1);
-INSERT INTO Biere VALUES(12, '', 8.00, 'Anna', 10.0, 75, 2018, '', 3, '2018-04-06', 1);
-INSERT INTO Biere VALUES(13, '', 8.00, 'Vox Stout(MilkShake)', 5.5, 25, 2018, '', 3, '2018-04-06', 1);
-INSERT INTO Biere VALUES(14, '', 8.00, 'Kettle Sour', 3.0, 3, 2018, '', 3, '2018-04-06', 1);
-INSERT INTO Biere VALUES(15, '', 8.00, 'Vox Pop IPA', 6.5, 45, 2018, '', 3, '2018-04-06', 1);
+INSERT INTO Biere VALUES(11, '', 8.00, 'Double Fruit Punch IPA', 8.0, 100, 2018, '', 3, '2018-04-06', 32);
+INSERT INTO Biere VALUES(12, '', 8.00, 'Anna', 10.0, 75, 2018, '', 3, '2018-04-06', 50);
+INSERT INTO Biere VALUES(13, '', 8.00, 'Vox Stout(MilkShake)', 5.5, 25, 2018, '', 3, '2018-04-06', 65);
+INSERT INTO Biere VALUES(14, '', 8.00, 'Kettle Sour', 3.0, 3, 2018, '', 3, '2018-04-06', 37);
+INSERT INTO Biere VALUES(15, '', 8.00, 'Vox Pop IPA', 6.5, 45, 2018, '', 3, '2018-04-06', 30);
 
-INSERT INTO Biere VALUES(16, '', 5.00, 'La Saison du Tracteur', 6.0, 35, 2018, '', 4, '2018-04-06', 1);
-INSERT INTO Biere VALUES(17, '', 5.00, 'Les Quatres Surfeurs de L\'Apocalypso', 6.5, 60, 2018, '', 4, '2018-04-06', 1);
-INSERT INTO Biere VALUES(18, '', 5.00, 'La Buteuse', 10.0, 60, 2018, '', 4, '2018-04-06', 1);
-INSERT INTO Biere VALUES(19, '', 5.00, 'Le Sang d\'Encre', 5.5, 45, 2018, '', 4, '2018-04-06', 1);
-INSERT INTO Biere VALUES(20, '', 5.00, 'La Morsure', 6.5, 77, 2018, '', 4, '2018-04-06', 1);
+INSERT INTO Biere VALUES(16, '', 5.00, 'La Saison du Tracteur', 6.0, 35, 2018, '', 4, '2018-04-06', 16);
+INSERT INTO Biere VALUES(17, '', 5.00, 'Les Quatres Surfeurs de L\'Apocalypso', 6.5, 60, 2018, '', 4, '2018-04-06', 30);
+INSERT INTO Biere VALUES(18, '', 5.00, 'La Buteuse', 10.0, 60, 2018, '', 4, '2018-04-06', 50);
+INSERT INTO Biere VALUES(19, '', 5.00, 'Le Sang d\'Encre', 5.5, 45, 2018, '', 4, '2018-04-06', 66);
+INSERT INTO Biere VALUES(20, '', 5.00, 'La Morsure', 6.5, 77, 2018, '', 4, '2018-04-06', 30);
 
-INSERT INTO Biere VALUES(21, '', 12.00, 'Super A', 8.0, 60, 2018, '', 5, '2018-04-06', 1);
-INSERT INTO Biere VALUES(22, '', 12.00, 'Saison Espinay', 6.5, 30, 2018, '', 5, '2018-04-06', 1);
-INSERT INTO Biere VALUES(23, '', 12.00, 'Arrière-Pays Grisette', 4.5, NULL, 2018, '', 5, '2018-04-06', 1);
-INSERT INTO Biere VALUES(24, '', 12.00, 'Arcane 17 IPA', 5.2, 60, 2018, '', 5, '2018-04-06', 1);
-INSERT INTO Biere VALUES(25, '', 12.00, 'Guerilla SSS', 7.8, 40, 2016, '', 5, '2018-04-06', 1);
+INSERT INTO Biere VALUES(21, '', 12.00, 'Super A', 8.0, 60, 2018, '', 5, '2018-04-06', 32);
+INSERT INTO Biere VALUES(22, '', 12.00, 'Saison Espinay', 6.5, 30, 2018, '', 5, '2018-04-06', 16);
+INSERT INTO Biere VALUES(23, '', 12.00, 'Arrière-Pays Grisette', 4.5, NULL, 2018, '', 5, '2018-04-06', 96);
+INSERT INTO Biere VALUES(24, '', 12.00, 'Arcane 17 IPA', 5.2, 60, 2018, '', 5, '2018-04-06', 30);
+INSERT INTO Biere VALUES(25, '', 12.00, 'Guerilla SSS', 7.8, 40, 2016, '', 5, '2018-04-06', 62);
