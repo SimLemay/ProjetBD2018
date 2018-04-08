@@ -12,9 +12,9 @@ app = Flask(__name__)
 utilisateur_courant = {}
 
 if args.reset:
-    bd.execute_script('scripts/reset_bd.sql')
-    bd.execute_script('scripts/creation_tables.sql')
-    bd.execute_script('scripts/insertion_tests.sql')
+    bd.execute_script_creation('scripts/reset_bd.sql')
+    bd.execute_script_creation('scripts/creation_tables.sql')
+    bd.execute_script_insertion('scripts/insertion_tests.sql')
     print("La BD et les tables ont ete correctement generees")
 elif __name__ == '__main__':
     app.run(debug=True, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))
