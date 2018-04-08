@@ -40,7 +40,7 @@ def execute_requete_ecriture(requete, *args):
 
 
 def execute_script_creation(fichier):
-    script = open(fichier, 'r')
+    script = open(fichier, 'r', encoding="utf-8")
     conn, cursor = open_connection_and_cursor()
     cmds = script.read().split(';')
     for cmd in cmds[:-1]:
@@ -49,7 +49,7 @@ def execute_script_creation(fichier):
 
 
 def execute_script_insertion(fichier):
-    script = open(fichier, 'r')
+    script = open(fichier, 'r', encoding="utf-8")
     conn, cursor = open_connection_and_cursor()
     cmds = script.read().split(';')
     for cmd in cmds[:-1]:
