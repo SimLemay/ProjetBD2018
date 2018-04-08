@@ -23,6 +23,10 @@ def accueil():
 def bieres():
     requete = 'SELECT id, nom FROM Sorte WHERE id NOT IN (SELECT id_sorte_enfant FROM Type_de);'
     sortes = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
+
+    requete2 = 'SELECT * FROM Biere;'
+    bieresdispo = bd.execute_requete_lecture(requete2, fetchall=True, obtenir_dict=True)
+
     try:
         id_sorte = int(request.args.get("id_sorte"))
         requete = 'SELECT id, nom FROM Sorte WHERE id IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s);'
@@ -34,7 +38,7 @@ def bieres():
         id_sous_sorte = int(request.args.get("id_sous_sorte"))
     except (ValueError, TypeError):
         id_sous_sorte = None
-    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte)
+    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=bieresdispo)
 
 
 @app.route('/connexion', methods=['GET'])
