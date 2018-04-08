@@ -9,21 +9,21 @@ insert into Mot_de_passe(id_utilisateur, mot_de_passe) values(7, X'5c75dc48fdb6b
 
 
 
-# Création des représentants des microbrasseries
+-- Création des représentants des microbrasseries
 INSERT INTO Utilisateur VALUES(1, 'Représentant Microbrasserie Dunham', 'Dunham', 'Tremblay', 30, '1111 rue de la Bière', '4183324323', 'Dunham@bière.ca', 'Jean');
 INSERT INTO Utilisateur VALUES(2, 'Representant Microbrasserie PitCaribou', 'Percé', 'Boivin', 32, '2222 rue de la Bière', '4183223534', 'PitCaribou@bière.ca', 'Marc');
 INSERT INTO Utilisateur VALUES(3, 'Representant Microbrasserie Vox Populi', 'Boucherville', 'Turcotte', 35, '3333 rue de la Bière', '4184345453', 'VoxPopuli@bière.ca', 'Étienne');
 INSERT INTO Utilisateur VALUES(4, 'Representant Microbrasserie Trou du Diable', 'Shawinigan', 'Chrétien', 40, '4444 rue de la Bière', '4184334324', 'TrouDuDiable@bière.ca', 'Jean');
 INSERT INTO Utilisateur VALUES(5, 'Representant Microbrasserie Auval', 'Gaspé', 'Lessard', 28, '5555 rue de la Bière', '4184334343', 'Auval@bière.ca', 'Guy');
 
-#Création des microbrasseries
+-- Création des microbrasseries
 INSERT INTO Microbrasserie VALUES(1, 'Brasserie Dunham', 'Dunham', 2011, 0);
 INSERT INTO Microbrasserie VALUES(2, 'Pit Caribou', 'Anse-à-Beaufils', 2007, 0);
 INSERT INTO Microbrasserie VALUES(3, 'Microbrasserie Vox Populi', 'Boucherville', 2016, 0);
 INSERT INTO Microbrasserie VALUES(4, 'Trou du Diable', 'Shawinigan', 2006, 0);
 INSERT INTO Microbrasserie VALUES(5, 'Brasserie Auval', 'Val d\'Espoir', 2016, 0);
 
-#Ajout de bieres
+-- Ajout de bieres
 
 INSERT INTO Biere VALUES(1, '', 20.00,'Cyclope Kappa IPA', 5.7, 60, 2018, '', 1, '2018-04-06', 0, 1);
 INSERT INTO Biere VALUES(2, '', 15.00, 'Supermoine Numéro 4', 4.5, NULL, 2018, '', 1, '2018-04-06', 0, 1);

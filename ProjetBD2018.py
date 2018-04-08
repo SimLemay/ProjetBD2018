@@ -1,10 +1,23 @@
 from flask import Flask, render_template, request, redirect
 import hashlib
 import re
+import argparse
 from util import util_bd as bd
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--reset', action='store_true')
+args = parser.parse_args()
 
 app = Flask(__name__)
 utilisateur_courant = {}
+
+if args.reset:
+    bd.execute_script('scripts/reset_bd.sql')
+    bd.execute_script('scripts/creation_tables.sql')
+    bd.execute_script('scripts/insertion_tests.sql')
+    print("La BD et les tables ont ete correctement generees")
+elif __name__ == '__main__':
+    app.run(debug=True, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))
 
 
 @app.route('/')
@@ -46,9 +59,11 @@ def deconnexion():
     utilisateur_courant = {}
     return redirect('/')
 
+
 @app.route('/recherche')
 def recherche():
     return render_template('search.html')
+
 
 @app.route('/affichage')
 def barre_navigation():
@@ -57,6 +72,3 @@ def barre_navigation():
     #requete2 = 'SELECT nom FROM Sorte WHERE Sorte.id = (SELECT id_sorte_enfant FROM Type_de GROUP BY id_sorte_parent)'
     #type_sorte = bd.execute_requete_lecture(requete2, fetchall=True)
     render_template('affichage.html', sorte=sorte)
-
-if __name__ == '__main__':
-    app.run(debug=True, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))

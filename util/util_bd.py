@@ -34,3 +34,12 @@ def execute_requete_ecriture(requete):
     except Exception as e:
         print(e)
     _close_connection_and_cursor(conn, cursor)
+
+
+def execute_script(fichier):
+    script = open(fichier, 'r')
+    conn, cursor = _open_connection_and_cursor()
+    cmds = script.read().split(';')
+    for cmd in cmds[:-1]:
+        cursor.execute(cmd)
+    _close_connection_and_cursor(conn, cursor)
