@@ -1,70 +1,42 @@
-<head>
+{% extends "base.html" %}
 
-    <link rel="stylesheet" id="bootstrap-css" href="../static/css/testlogin.css">
-</head>
-<body>
+{% block titre %}Connexion{% endblock %}
 
-<form id="connexion_form" method="post" action="/connexion">
-    <div>
-        <label for="courriel"><b>Courriel</b></label>
-        <input type="text" placeholder="Entrer votre adresse courrie;" id="courriel" name="courriel">
-    </div>
-    <div>
-        <label for="mot_de_passe"><b>Mot de passe</b></label>
-        <input type="password" placeholder="Entrer votre mot de passe" id="mot_de_passe" , name="mot_de_passe">
-    </div>
-    <div>
-        <button type="submit">Login</button>
-        {% if message_erreur %}
-            <label>{{ message_erreur }}</label>
-        {% endif %}
-    </div>
-</form>
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" id="bootstrap-css" href="../static/css/login.css">
+{% endblock %}
 
-
-<div class="container">
-    <div class="card card-container">
-        <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
-        <p id="profile-name" class="profile-name-card"></p>
-        <form class="form-signin">
-            <span id="reauth-email" class="reauth-email"></span>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-            <div id="remember" class="checkbox">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
-            <div class="alert alert-danger" role="alert">
-                This is a danger alert—check it out!
-            </div>
-            <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-                <div class="card-header">Header</div>
-                <div class="card-body">
-                    <h5 class="card-title">Warning card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <div style="display: block">
-                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple" style="width: 100%">
-                            <option value="AL">Alabama</option>
-                            <option value="WY">Wyoming</option>
-                        </select>
+{% block container %}
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <form id="connexion_form" method="post" action="/connexion">
+                <div>
+                    <label for="courriel"><b>Courriel</b></label>
+                    <input type="text" placeholder="Entrer votre adresse courrie;" id="courriel" name="courriel">
+                </div>
+                <div>
+                    <label for="mot_de_passe"><b>Mot de passe</b></label>
+                    <input type="password" placeholder="Entrer votre mot de passe" id="mot_de_passe" ,
+                           name="mot_de_passe">
+                </div>
+                <div>
+                    <button type="submit">Login</button>
+                    <div>
+                        {% if message_erreur %}
+                            <label>{{ message_erreur }}</label>
+                        {% endif %}
                     </div>
 
                 </div>
-            </div>
+            </form>
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+{% endblock %}
 
-            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-        </form><!-- /form -->
-        <a href="#" class="forgot-password">
-            Forgot the password?
-        </a>
-    </div><!-- /card-container -->
-</div><!-- /container -->
-
-
-<script src="../static/dist/bundle.js"></script>
-<script src="../static/js/login.js"></script>
-
-</body>
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/login.js"></script>
+{% endblock %}

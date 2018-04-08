@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block titre %}Les bieres{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" id="bootstrap-css" href="../static/css/bieres.css">
+{% endblock %}
+
+{% block container %}
+    <div class="row my-4">
+        <div class="col-lg-3">
+            <h2>Sortes de bieres</h2>
+            <div class="list-group mb-4">
+                <a href="/bieres" class="list-group-item sorte-biere {{ 'active' if not id_sorte }}">Toutes les
+                    sortes</a>
+            </div>
+            <div class="list-group">
+                {% for sorte in sortes %}
+                    <a href="/bieres?id_sorte={{ sorte.id }}"
+                       class="list-group-item sorte-biere {{ 'active' if sorte.id == id_sorte }}">{{ sorte.nom }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="pull-right">
+                <form action="/bieres">
+                    <input type="hidden" name="id_sorte" value="{{ id_sorte }}">
+                    <select id="selecteur-sous-sorte" name="id_sous_sorte">
+                        {% for sous_sorte in sous_sortes %}
+                            <option value="{{ sous_sorte.id }}" {{ 'selected' if sous_sorte.id ==  id_sous_sorte}}>{{ sous_sorte.nom }}</option>
+                        {% endfor %}
+                    </select>
+                    &nbsp;
+                    <button id="bouton-rechercher" type="submit" class="btn btn-success"><i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div>
+                <table id="resultats">
+
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/bieres.js"></script>
+{% endblock %}

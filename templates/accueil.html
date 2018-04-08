@@ -1,18 +1,31 @@
-<!doctype html>
-<title>Quebec Biere</title>
-{% if utilisateur_courant.prenom %}
-    <h1>Hello {{ utilisateur_courant.prenom }}!</h1>
-    <a href="/deconnexion">Deconnexion</a>
+{% extends "base.html" %}
 
-{% else %}
-    <h1>Hello, World!</h1>
-    <a href="/connexion">Connexion</a>
-{% endif %}
+{% block titre %}Accueil{% endblock %}
 
-{% for biere in bieres %}
-    <li><h2>{{ biere[0] }}</h2>{{ biere[1] }}
-        {% else %}
-    <li><em>Aucune biere a presenter</em>
-{% endfor %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" id="bootstrap-css" href="../static/css/accueil.css">
+{% endblock %}
 
+{% block container %}
+    {% if utilisateur_courant.prenom %}
+        <h1>Hello {{ utilisateur_courant.prenom }}!</h1>
+        <a href="/deconnexion">Deconnexion</a>
+
+    {% else %}
+        <h1>Hello, World!</h1>
+        <a href="/connexion">Connexion</a>
+    {% endif %}
+
+    {% for biere in bieres %}
+        <li><h2>{{ biere.id }}</h2>{{ biere.nom }}
+            {% else %}
+        <li><em>Aucune biere a presenter</em>
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/accueil.js"></script>
+{% endblock %}
 

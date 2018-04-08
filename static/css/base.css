@@ -1,0 +1,28 @@
+body {
+    padding-top: 60px;
+}
+
+.bande-couleur {
+    background-color: #3e5121;
+}
+
+.nav-link {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+}
+
+.nav-item:hover {
+    background-color: #247700;
+}
+
+.nav-item:hover>.nav-link {
+    color: white !important;
+}
+
+.nav-item.active {
+    background-color: #132600;
+}
+
+.nav-item.active:hover>.nav-link {
+    color: #247700 !important;
+}

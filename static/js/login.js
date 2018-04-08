@@ -1,3 +1,6 @@
-$(document).ready(function() {
-    $('.js-example-basic-multiple').select2();
+$(document).ready(function () {
+    $('#courriel').val("");
+    $('#mot_de_passe').val("");
+    $("#bouton-connexion").addClass("active");
 });
+

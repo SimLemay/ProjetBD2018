@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <title>{% block titre %}{% endblock %} - Quebec Micro</title>
+        <link rel="stylesheet" id="bootstrap-css" href="../static/css/base.css">
+    {% endblock %}
+</head>
+<body>
+
+<nav class="bande-couleur navbar navbar-expand-lg navbar-dark fixed-top py-0">
+    <div class="container">
+        <a class="navbar-brand" href="#">Quebec Bieres</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ml-auto">
+                <li id="bouton-accueil" class="nav-item">
+                    <a class="nav-link" href="/accueil">Accueil</a>
+                </li>
+                <li id="bouton-bieres" class="nav-item">
+                    <a class="nav-link" href="/bieres">Bieres</a>
+                </li>
+                <li id="bouton-micros" class="nav-item">
+                    <a class="nav-link" href="#">Microbrasseries</a>
+                </li>
+                <li id="bouton-contacter" class="nav-item">
+                    <a class="nav-link" href="#">Nous contacter</a>
+                </li>
+                <li id="bouton-panier" class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-fw fa-shopping-cart"></i>Panier</a>
+                </li>
+                <li id="bouton-connexion" class="nav-item">
+                    <a class="nav-link" href="/connexion"><i class="fa fa-fw fa-user"></i>Connexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">{% block container %}{% endblock %}</div>
+
+<footer class="bande-couleur py-5 mt-4">
+    <div class="container">
+        <p class="m-0 text-center text-white">GLO-2005 &nbsp;&nbsp;-&nbsp;&nbsp; ProjetBD2018 &nbsp;&nbsp;-&nbsp;&nbsp;
+            Simon Lemay-Lauziere et Keven Lamontagne</p>
+    </div>
+</footer>
+
+{% block scripts %}
+    <script src="../static/dist/bundle.js"></script>
+{% endblock %}
+
+</body>
+</html>

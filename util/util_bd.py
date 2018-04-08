@@ -1,11 +1,13 @@
 import pymysql
 
 
-def open_connection_and_cursor():
+def open_connection_and_cursor(obtenir_dict=False):
+    arg_cursorclass = {'cursorclass': pymysql.cursors.DictCursor} if obtenir_dict else {}
     conn = pymysql.connect(host='localhost',
                            user='projetbduser',
                            password='gUPqV1qOGG4jVcn4Ab8uuPeiCV42Pm4N4Eh1hJ7SUVctzeH7cbep1EMRUVmUGNnv',
-                           db='ProjetBD')
+                           db='ProjetBD',
+                           **arg_cursorclass)
     cursor = conn.cursor()
     return conn, cursor
 
@@ -15,9 +17,9 @@ def close_connection_and_cursor(connection, cursor):
     cursor.close()
 
 
-def execute_requete_lecture(requete, fetchall=False):
-    conn, cursor = open_connection_and_cursor()
-    cursor.execute(requete)
+def execute_requete_lecture(requete, *args, fetchall=False, obtenir_dict=False):
+    conn, cursor = open_connection_and_cursor(obtenir_dict)
+    cursor.execute(requete, *args)
     if fetchall:
         r = cursor.fetchall()
     else:
@@ -26,10 +28,10 @@ def execute_requete_lecture(requete, fetchall=False):
     return r
 
 
-def execute_requete_ecriture(requete):
+def execute_requete_ecriture(requete, *args):
     conn, cursor = open_connection_and_cursor()
     try:
-        cursor.execute(requete)
+        cursor.execute(requete, *args)
         conn.commit()
     except Exception as e:
         print(e)

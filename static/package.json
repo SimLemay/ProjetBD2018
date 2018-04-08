@@ -17,16 +17,17 @@
   },
   "homepage": "https://github.com/SimLemay/ProjetBD2018#readme",
   "devDependencies": {
+    "css-loader": "^0.28.11",
+    "file-loader": "^1.1.11",
+    "style-loader": "^0.20.3",
     "webpack": "^4.5.0",
     "webpack-cli": "^2.0.14"
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
-    "css-loader": "^0.28.11",
-    "datatables.net": "^1.10.16",
+    "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3",
-    "select2": "^4.0.6-rc.1",
-    "style-loader": "^0.20.3"
+    "select2": "^4.0.6-rc.1"
   }
 }
