@@ -9,6 +9,8 @@ body {
 .nav-link {
     padding-top: 16px !important;
     padding-bottom: 16px !important;
+    padding-right: 8px !important;
+    padding-left: 8px !important;
 }
 
 .nav-item:hover {
@@ -26,3 +28,5 @@ body {
 .nav-item.active:hover>.nav-link {
     color: #247700 !important;
 }
+
+

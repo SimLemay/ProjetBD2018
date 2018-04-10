@@ -8,9 +8,13 @@
 {% endblock %}
 
 {% block container %}
-    <div class="row my-4">
-        <div class="col-lg-3">
-            <h2>Sortes de bieres</h2>
+    <div class="row my-3">
+        <div class="col-lg-3 my-1">
+            <div class="row en-tete-recherche">
+                <div class="col-lg-12">
+                    <h2 class="mb-0">Sortes de bieres</h2>
+                </div>
+            </div>
             <div class="list-group mb-4">
                 <a href="/bieres" class="list-group-item sorte-biere {{ 'active' if not id_sorte }}">Toutes les
                     sortes</a>
@@ -22,44 +26,50 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-lg-9">
-            <div class="pull-right">
-                <form action="/bieres">
-                    <input type="hidden" name="id_sorte" value="{{ id_sorte }}">
-                    <select id="selecteur-sous-sorte" name="id_sous_sorte">
-                        {% for sous_sorte in sous_sortes %}
-                            <option value="{{ sous_sorte.id }}" {{ 'selected' if sous_sorte.id ==  id_sous_sorte}}>{{ sous_sorte.nom }}</option>
-                        {% endfor %}
-                    </select>
-                    &nbsp;
-                    <button id="bouton-rechercher" type="submit" class="btn btn-success"><i class="fa fa-search"></i>
-                    </button>
-                </form>
-            </div>
-            <div>
-                <table id="resultats">
+        <div class="col-lg-9 my-1">
+            <div class="row en-tete-recherche">
+                <div class="col-lg-12">
+                    <div class="float-right barre-recherche">
+                        <form action="/bieres">
+                            <input type="hidden" name="id_sorte" value="{{ id_sorte }}">
+                            <div style="display: flex">
+                                <div style="flex-grow: 1; padding-right: 8px;" id="barre-recherche-container">
 
-                </table>
-            </div>
-            <div class="row my-5">
-                {% for biere in bieresdispo %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                        <div class="card-body">
-                          <h4 class="card-title">
-                            <a href="#">{{ biere.nom }}</a>
-                          </h4>
-                          <h5>{{ biere.id_sorte }}</h5>
-                          <h6> Degré d'alcool:  {{ biere.pourcentage_alcool }}% IBU: {{ biere.ibu }}</h6>
-                          <p class="card-text"> </p>
-                          <h6> {{ biere.prix }}</h6>
-                        </div>
-                        <div class="card-footer">
-                          <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                        </div>
+                                    <select id="selecteur-sous-sorte" name="id_sous_sorte" class="barre-recherche">
+                                        {% for sous_sorte in sous_sortes %}
+                                            <option value="{{ sous_sorte.id }}" {{ 'selected' if sous_sorte.id ==  id_sous_sorte }}>{{ sous_sorte.nom }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div>
+                                    <button id="bouton-rechercher" type="submit" class="btn btn-success"><i
+                                            class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                {% for biere in bieresdispo %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100">
+                            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <a href="#">{{ biere.nom }}</a>
+                                </h4>
+                                <h5>{{ biere.id_sorte }}</h5>
+                                <h6> Degré d'alcool: {{ biere.pourcentage_alcool }}% IBU: {{ biere.ibu }}</h6>
+                                <p class="card-text"></p>
+                                <h6> {{ biere.prix }}</h6>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                            </div>
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
 

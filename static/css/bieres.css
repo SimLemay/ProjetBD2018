@@ -39,3 +39,21 @@
     height: 40px;
     width: 40px;
 }
+
+.en-tete-recherche {
+    min-height: 50px;
+}
+
+.barre-recherche {
+    width: 50%;
+}
+
+@media (max-width: 992px) {
+    .barre-recherche {
+        width: 100%;
+    }
+}
+
+#barre-recherche-container > .select2-container {
+    width: 100% !important;
+}
