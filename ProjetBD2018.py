@@ -24,21 +24,36 @@ def bieres():
     requete = 'SELECT id, nom FROM Sorte WHERE id NOT IN (SELECT id_sorte_enfant FROM Type_de);'
     sortes = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
 
-    requete2 = 'SELECT * FROM Biere;'
-    bieresdispo = bd.execute_requete_lecture(requete2, fetchall=True, obtenir_dict=True)
-
     try:
         id_sorte = int(request.args.get("id_sorte"))
+        id_sous_sorte = int(request.args.get("id_sous_sorte"))
+        requete = 'SELECT * FROM Biere WHERE id_sorte = %s;'
+        biere_dispo = bd.execute_requete_lecture(requete, id_sous_sorte, fetchall=True, obtenir_dict=True)
+
+        # Sous-sortes
         requete = 'SELECT id, nom FROM Sorte WHERE id IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s);'
         sous_sortes = bd.execute_requete_lecture(requete, id_sorte, fetchall=True, obtenir_dict=True)
-    except (ValueError, TypeError):
-        id_sorte = None
-        sous_sortes = []
-    try:
-        id_sous_sorte = int(request.args.get("id_sous_sorte"))
+
     except (ValueError, TypeError):
         id_sous_sorte = None
-    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=bieresdispo)
+        try:
+            id_sorte = int(request.args.get("id_sorte"))
+
+            # Sous-sortes
+            requete = 'SELECT id, nom FROM Sorte WHERE id IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s);'
+            sous_sortes = bd.execute_requete_lecture(requete, id_sorte, fetchall=True, obtenir_dict=True)
+
+            #Bieres dispos
+            requete = 'SELECT * FROM Biere WHERE id_sorte IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s);'
+            biere_dispo = bd.execute_requete_lecture(requete, id_sorte, fetchall=True, obtenir_dict=True)
+
+        except (ValueError, TypeError):
+            id_sorte = None
+            sous_sortes = []
+            requete = 'SELECT * FROM Biere;'
+            biere_dispo = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
+
+    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo)
 
 
 @app.route('/connexion', methods=['GET'])
