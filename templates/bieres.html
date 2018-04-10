@@ -34,7 +34,6 @@
                             <input type="hidden" name="id_sorte" value="{{ id_sorte }}">
                             <div style="display: flex">
                                 <div style="flex-grow: 1; padding-right: 8px;" id="barre-recherche-container">
-
                                     <select id="selecteur-sous-sorte" name="id_sous_sorte" class="barre-recherche">
                                         {% for sous_sorte in sous_sortes %}
                                             <option value="{{ sous_sorte.id }}" {{ 'selected' if sous_sorte.id ==  id_sous_sorte }}>{{ sous_sorte.nom }}</option>
@@ -75,7 +74,6 @@
 
         </div>
     </div>
-
 {% endblock %}
 
 {% block scripts %}
