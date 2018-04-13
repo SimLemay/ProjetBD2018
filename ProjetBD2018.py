@@ -22,7 +22,7 @@ def accueil():
 
 @app.route('/nousContacter', methods=['GET'])
 def nousContacter():
-    return render_template('nousContacter.html')
+    return render_template('nousContacter.html', utilisateur_courant=utilisateur_courant)
 
 @app.route('/bieres', methods=['GET'])
 def bieres():
