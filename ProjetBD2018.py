@@ -16,7 +16,7 @@ utilisateur_courant = {}
 
 @app.route('/')
 def accueil():
-    requete = 'SELECT id, nom FROM Biere;'
+    requete = 'SELECT B.id as id, B.nom as bnom, S.nom as snom, B.prix as prix, B.ibu as ibu, B.pourcentage_alcool as pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
     bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
     return render_template('accueil.html', bieres=bieres, utilisateur_courant=utilisateur_courant)
 
@@ -49,13 +49,13 @@ def bieres():
             sous_sortes = bd.execute_requete_lecture(requete, id_sorte, fetchall=True, obtenir_dict=True)
 
             #Bieres dispos
-            requete = 'SELECT * FROM Biere WHERE id_sorte IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s);'
+            requete = 'SELECT B.id as id, B.nom as bnom, S.nom as snom, B.prix as prix, B.ibu as ibu, B.pourcentage_alcool as pa FROM Biere B, Sorte S WHERE B.id_sorte IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s) AND B.id_sorte = S.id;'
             biere_dispo = bd.execute_requete_lecture(requete, id_sorte, fetchall=True, obtenir_dict=True)
 
         except (ValueError, TypeError):
             id_sorte = None
             sous_sortes = []
-            requete = 'SELECT * FROM Biere;'
+            requete = 'SELECT B.id as id, B.nom as bnom, S.nom as snom, B.prix as prix, B.ibu as ibu, B.pourcentage_alcool as pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
             biere_dispo = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
 
     return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo)
