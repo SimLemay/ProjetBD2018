@@ -65,7 +65,26 @@
                                 <h6> {{ biere.prix }} $</h6>
                             </div>
                             <div class="card-footer">
-                                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                                <form class="ajout-biere-panier" method="post" action="/ajouter-au-panier">
+                                    <div class="row">
+                                        <input type="hidden" name="id_biere" value="{{ biere.id }}">
+                                        <input type="hidden" class="redirect-url" name="redirect_url">
+                                        <div class="col-4 p-0 text-center">
+                                            <div style="display: table; height: 100%; margin: 0 auto">
+                                                <label class="mb-0" style="display: table-cell; vertical-align: middle">Quantité
+                                                    :</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 p-0 text-center">
+                                            <input class="form-control text-center" type="number" name="quantite" min="1" value="1">
+                                        </div>
+                                        <div class="col-4 p-0 text-center">
+                                            <button type="submit" class="btn bouton-ajout-panier">
+                                                <i style="color: white" class="fa fa-fw fa-cart-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

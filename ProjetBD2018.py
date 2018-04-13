@@ -58,18 +58,19 @@ def bieres():
             requete = 'SELECT B.id as id, B.nom as bnom, S.nom as snom, B.prix as prix, B.ibu as ibu, B.pourcentage_alcool as pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
             biere_dispo = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
 
-    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo)
+    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo, utilisateur_courant=utilisateur_courant)
 
 
 @app.route('/Microbrasserie', methods=['GET'])
 def microbrasserie():
     requete = 'SELECT * FROM Microbrasserie'
     micro = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
-    return render_template("microbrasserie.html", micro=micro)
+    return render_template("microbrasserie.html", micro=micro, utilisateur_courant=utilisateur_courant)
+
 
 @app.route('/connexion', methods=['GET'])
 def afficher_connexion():
-    return render_template('login.html')
+    return render_template('login.html', utilisateur_courant=utilisateur_courant)
 
 
 @app.route('/connexion', methods=['POST'])
@@ -85,9 +86,10 @@ def connexion():
             if hash_bd is not None and hash_bd == hashlib.sha512(mot_de_passe.encode('utf-8')).digest():
                 requete = 'SELECT nom, prenom FROM Utilisateur WHERE id=%s;'
                 utilisateur_courant = bd.execute_requete_lecture(requete, id_, obtenir_dict=True)
-                if utilisateur_courant:
-                    return redirect('/')
-    return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide")
+                utilisateur_courant['panier'] = list()
+                utilisateur_courant['nombre_bieres'] = 0
+                return redirect('/')
+    return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide", utilisateur_courant=utilisateur_courant)
 
 @app.route('/panier')
 def panier():
@@ -98,6 +100,23 @@ def deconnexion():
     global utilisateur_courant
     utilisateur_courant = {}
     return redirect('/')
+
+
+@app.route('/ajouter-au-panier', methods=['POST'])
+def ajout_panier():
+    global utilisateur_courant
+    try:
+        id_biere = int(request.form.get('id_biere'))
+        quantite = int(request.form.get('quantite'))
+        if ('panier', 'nombre_bieres') not in utilisateur_courant.keys():
+            utilisateur_courant['panier'] = list()
+            utilisateur_courant['nombre_bieres'] = 0
+        utilisateur_courant['panier'].append((id_biere, quantite))
+        utilisateur_courant['nombre_bieres'] += quantite
+    except ValueError:
+        pass
+    redirect_url = request.form.get('redirect_url')
+    return redirect(redirect_url)
 
 
 if args.reset:
