@@ -1,3 +1,5 @@
+
+
 from flask import Flask, render_template, request, redirect
 import hashlib
 import re
@@ -55,6 +57,12 @@ def bieres():
 
     return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo)
 
+
+@app.route('/Microbrasserie', methods=['GET'])
+def microbrasserie():
+    requete = 'SELECT * FROM Microbrasserie'
+    micro = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
+    return render_template("microbrasserie.html", micro=micro)
 
 @app.route('/connexion', methods=['GET'])
 def afficher_connexion():
