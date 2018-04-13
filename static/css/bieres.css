@@ -57,3 +57,11 @@
 #barre-recherche-container > .select2-container {
     width: 100% !important;
 }
+
+.bouton-ajout-panier {
+    background-color: #132600;
+}
+
+.bouton-ajout-panier:hover {
+    background-color: #247700;
+}
