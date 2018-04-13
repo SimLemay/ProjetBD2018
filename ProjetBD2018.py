@@ -92,7 +92,7 @@ def connexion():
     return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide", utilisateur_courant=utilisateur_courant)
 
 
-@app.route('/deconnexion', methods=['POST'])
+@app.route('/deconnexion')
 def deconnexion():
     global utilisateur_courant
     utilisateur_courant = {}
