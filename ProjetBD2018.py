@@ -20,6 +20,9 @@ def accueil():
     bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
     return render_template('accueil.html', bieres=bieres, utilisateur_courant=utilisateur_courant)
 
+@app.route('/nousContacter', methods=['GET'])
+def nousContacter():
+    return render_template('nousContacter.html')
 
 @app.route('/bieres', methods=['GET'])
 def bieres():
