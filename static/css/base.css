@@ -17,7 +17,7 @@ body {
     background-color: #247700;
 }
 
-.nav-item:hover>.nav-link {
+.nav-item:hover > .nav-link {
     color: white !important;
 }
 
@@ -25,7 +25,7 @@ body {
     background-color: #132600;
 }
 
-.nav-item.active:hover>.nav-link {
+.nav-item.active:hover > .nav-link {
     color: #247700 !important;
 }
 

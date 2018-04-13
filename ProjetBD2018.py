@@ -1,5 +1,3 @@
-
-
 from flask import Flask, render_template, request, redirect
 import hashlib
 import re
@@ -16,13 +14,15 @@ utilisateur_courant = {}
 
 @app.route('/')
 def accueil():
-    requete = 'SELECT B.id as id, B.nom as bnom, S.nom as snom, B.prix as prix, B.ibu as ibu, B.pourcentage_alcool as pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
+    requete = 'SELECT B.id AS id, B.nom AS bnom, S.nom AS snom, B.prix AS prix, B.ibu AS ibu, B.pourcentage_alcool AS pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
     bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
     return render_template('accueil.html', bieres=bieres, utilisateur_courant=utilisateur_courant)
+
 
 @app.route('/nousContacter', methods=['GET'])
 def nousContacter():
     return render_template('nousContacter.html', utilisateur_courant=utilisateur_courant)
+
 
 @app.route('/bieres', methods=['GET'])
 def bieres():
@@ -48,17 +48,19 @@ def bieres():
             requete = 'SELECT id, nom FROM Sorte WHERE id IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s);'
             sous_sortes = bd.execute_requete_lecture(requete, id_sorte, fetchall=True, obtenir_dict=True)
 
-            #Bieres dispos
-            requete = 'SELECT B.id as id, B.nom as bnom, S.nom as snom, B.prix as prix, B.ibu as ibu, B.pourcentage_alcool as pa FROM Biere B, Sorte S WHERE B.id_sorte IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s) AND B.id_sorte = S.id;'
+            # Bieres dispos
+            requete = 'SELECT B.id AS id, B.nom AS bnom, S.nom AS snom, B.prix AS prix, B.ibu AS ibu, B.pourcentage_alcool AS pa FROM Biere B, Sorte S WHERE B.id_sorte IN (SELECT id_sorte_enfant FROM Type_de WHERE id_sorte_parent = %s) AND B.id_sorte = S.id;'
             biere_dispo = bd.execute_requete_lecture(requete, id_sorte, fetchall=True, obtenir_dict=True)
 
         except (ValueError, TypeError):
             id_sorte = None
             sous_sortes = []
-            requete = 'SELECT B.id as id, B.nom as bnom, S.nom as snom, B.prix as prix, B.ibu as ibu, B.pourcentage_alcool as pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
+            requete = 'SELECT B.id AS id, B.nom AS bnom, S.nom AS snom, B.prix AS prix, B.ibu AS ibu, B.pourcentage_alcool AS pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
             biere_dispo = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
 
-    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes, id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo, utilisateur_courant=utilisateur_courant)
+    return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes,
+                           id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo,
+                           utilisateur_courant=utilisateur_courant)
 
 
 @app.route('/Microbrasserie', methods=['GET'])
@@ -78,7 +80,8 @@ def connexion():
     global utilisateur_courant
     courriel = request.form.get('courriel')
     mot_de_passe = request.form['mot_de_passe']
-    if courriel is not None and mot_de_passe is not None and len(courriel) <= 100 and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
+    if courriel is not None and mot_de_passe is not None and len(courriel) <= 100 and re.match(
+            r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
         requete = 'SELECT id_utilisateur, mot_de_passe FROM Mot_de_passe WHERE id_utilisateur IN (SELECT id FROM Utilisateur WHERE courriel=%s);'
         row = bd.execute_requete_lecture(requete, courriel)
         if row is not None:
@@ -89,11 +92,14 @@ def connexion():
                 utilisateur_courant['panier'] = list()
                 utilisateur_courant['nombre_bieres'] = 0
                 return redirect('/')
-    return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide", utilisateur_courant=utilisateur_courant)
+    return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide",
+                           utilisateur_courant=utilisateur_courant)
+
 
 @app.route('/panier')
 def panier():
     return render_template('panier.html')
+
 
 @app.route('/deconnexion')
 def deconnexion():
