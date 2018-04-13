@@ -91,6 +91,9 @@ def connexion():
                 return redirect('/')
     return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide", utilisateur_courant=utilisateur_courant)
 
+@app.route('/panier')
+def panier():
+    return render_template('panier.html')
 
 @app.route('/deconnexion')
 def deconnexion():
