@@ -105,7 +105,7 @@ def ajout_panier():
     try:
         id_biere = int(request.form.get('id_biere'))
         quantite = int(request.form.get('quantite'))
-        if ('panier', 'nombre_bieres') not in utilisateur_courant.keys():
+        if 'panier' not in utilisateur_courant.keys() or 'nombre_bieres' not in utilisateur_courant.keys():
             utilisateur_courant['panier'] = list()
             utilisateur_courant['nombre_bieres'] = 0
         utilisateur_courant['panier'].append((id_biere, quantite))
