@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block titre %}Nous Contacter{% endblock %}
+{% block titre %}Votre panier{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -19,20 +19,21 @@
         </tr>
         </thead>
         <tbody>
+        {% for biere in bierepanier %}
         <tr>
             <td data-th="Bière">
                 <div class="row">
                     <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..."
                                                          class="img-responsive"/></div>
                     <div class="col-sm-10">
-                        <h4 class="nomargin">Nom</h4>
-                        <p>Type,Provenance</p>
+                        <h4 class="nomargin"> {{ biere.bnom }}</h4>
+                        <p>{{ biere.snom }},{{ biere.mnom }}</p>
                     </div>
                 </div>
             </td>
-            <td data-th="Prix">Prix</td>
+            <td data-th="Prix">{{ biere.prix }}</td>
             <td data-th="Quantity">
-                <input type="number" class="form-control text-center" value="1">
+                <input type="number" class="form-control text-center" value="{{ quantite }}">
             </td>
             <td data-th="Sous-total" class="text-center">Prix</td>
             <td class="actions" data-th="">
@@ -40,13 +41,14 @@
                 <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
             </td>
         </tr>
+        {% endfor %}
         </tbody>
         <tfoot>
         <tr class="visible-xs">
             <td class="text-center"><strong>Total (Montant final) $</strong></td>
         </tr>
         <tr>
-            <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continuer à magasiner</a></td>
+            <td><a href="/bieres" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continuer à magasiner</a></td>
             <td colspan="2" class="hidden-xs"></td>
             <td class="hidden-xs text-center"><strong>Total (Montant) $</strong></td>
             <td><a href="#" class="btn btn-success btn-block">Passer à la caisse <i class="fa fa-angle-right"></i></a>

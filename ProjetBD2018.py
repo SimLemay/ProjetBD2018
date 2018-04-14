@@ -89,16 +89,47 @@ def connexion():
             if hash_bd is not None and hash_bd == hashlib.sha512(mot_de_passe.encode('utf-8')).digest():
                 requete = 'SELECT nom, prenom FROM Utilisateur WHERE id=%s;'
                 utilisateur_courant = bd.execute_requete_lecture(requete, id_, obtenir_dict=True)
-                utilisateur_courant['panier'] = list()
+                utilisateur_courant['panier'] = dict()
                 utilisateur_courant['nombre_bieres'] = 0
                 return redirect('/')
     return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide",
                            utilisateur_courant=utilisateur_courant)
 
+@app.route('/inscription', methods=['GET'])
+def afficher_signup():
+    return render_template('inscription.html', utilisateur_courant=utilisateur_courant)
+
+@app.route('/inscription', methods=['POST'])
+def signup():
+    prenom = request.form.get('prenom')
+    nom = request.form.get('nom')
+    courriel = request.form.get('courriel')
+    mot_de_passe = request.form.get('motdepasse')
+    confirmation = request.form.get('confirmation')
+    requete = 'SELECT id FROM Utilisateur WHERE courriel = %s;'
+    courrielexiste = bd.execute_requete_lecture(requete, courriel)
+    if not courrielexiste:
+        if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom):
+            hash_bd = hashlib.sha512(mot_de_passe.encode('utf-8')).digest()
+            ajout = 'INSERT INTO Utilisateur (courriel, nom, prenom) VALUES (%s, %s, %s);'
+            bd.execute_requete_ecriture(ajout, courriel, nom, prenom)
+            ajout_mdp = 'INSERT INTO Mot_de_passe (mot_de_passe) VALUES (%s);'
+            bd.execute_requete_ecriture(ajout_mdp, hash_bd)
+            return redirect('/')
+
+    return render_template('inscription.html', utilisateur_courant=utilisateur_courant, message_erreur= 'Le courriel est déjà utilisé ou les mots de passes ne concordent pas')
+
+
+
 
 @app.route('/panier')
 def panier():
-    return render_template('panier.html')
+    bierepanier = list()
+    for idbiere in utilisateur_courant.keys():
+        requete = 'SELECT B.nom as bnom, B.prix as prix, M.nom as mnom, S.nom as snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id_utilisateur AND B.id = %s;'
+        info = bd.execute_requete_lecture(requete, idbiere, fetchall=True, obtenir_dict=True)
+        bierepanier.append(info)
+    return render_template('panier.html', utilisateur_courant=utilisateur_courant, bierepanier=bierepanier)
 
 
 @app.route('/deconnexion')
@@ -115,9 +146,9 @@ def ajout_panier():
         id_biere = int(request.form.get('id_biere'))
         quantite = int(request.form.get('quantite'))
         if 'panier' not in utilisateur_courant.keys() or 'nombre_bieres' not in utilisateur_courant.keys():
-            utilisateur_courant['panier'] = list()
+            utilisateur_courant['panier'] = dict()
             utilisateur_courant['nombre_bieres'] = 0
-        utilisateur_courant['panier'].append((id_biere, quantite))
+        utilisateur_courant['panier'].update({id_biere: quantite})
         utilisateur_courant['nombre_bieres'] += quantite
     except ValueError:
         pass
