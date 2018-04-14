@@ -12,23 +12,37 @@
         <div class="col-lg-3"></div>
         <div class="col-lg-6">
             <form id="connexion_form" method="post" action="/connexion">
-                <div>
-                    <label for="courriel"><b>Courriel</b></label>
-                    <input type="text" placeholder="Entrer votre adresse courrie;" id="courriel" name="courriel">
-                </div>
-                <div>
-                    <label for="mot_de_passe"><b>Mot de passe</b></label>
-                    <input type="password" placeholder="Entrer votre mot de passe" id="mot_de_passe" ,
-                           name="mot_de_passe">
-                </div>
-                <div>
-                    <button type="submit">Login</button>
-                    <div>
+                <div class="row">
+                    <div class="col-12 mt-5">
                         {% if message_erreur %}
-                            <label>{{ message_erreur }}</label>
+                            <label style="color: red">{{ message_erreur }}</label>
                         {% endif %}
                     </div>
-
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <input class="form-control" type="text" placeholder="Adresse courriel" id="courriel"
+                               name="courriel">
+                    </div>
+                </div>
+                <div class="row mt-3 mb-3">
+                    <div class="col-12">
+                        <input class="form-control" type="password" placeholder="Mot de passe" id="mot_de_passe" ,
+                               name="mot_de_passe">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <button class="btn btn-default btn-block bouton-connexion" type="submit">Login</button>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <a href="#">Mot de passe oublié</a>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a href="#">S'inscrire</a>
+                    </div>
                 </div>
             </form>
         </div>
