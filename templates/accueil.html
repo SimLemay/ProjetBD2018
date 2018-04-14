@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block container %}
-    {% if utilisateur_courant.prenom %}
-        <h1>Hello {{ utilisateur_courant.prenom }}!</h1>
+    {% if model['utilisateur_courant'].prenom %}
+        <h1>Hello {{ model['utilisateur_courant'].prenom }}!</h1>
         <a href="/deconnexion">Deconnexion</a>
 
     {% else %}

@@ -9,19 +9,22 @@ parser.add_argument('--reset', action='store_true')
 args = parser.parse_args()
 
 app = Flask(__name__)
-utilisateur_courant = {}
+model = {'utilisateur_courant': {}}
+erreur_connexion = False
 
 
 @app.route('/')
 def accueil():
     requete = 'SELECT B.id AS id, B.nom AS bnom, S.nom AS snom, B.prix AS prix, B.ibu AS ibu, B.pourcentage_alcool AS pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
     bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
-    return render_template('accueil.html', bieres=bieres, utilisateur_courant=utilisateur_courant)
+    _handle_erreur_connexion()
+    return render_template('accueil.html', bieres=bieres, model=model)
 
 
 @app.route('/nousContacter', methods=['GET'])
 def nousContacter():
-    return render_template('nousContacter.html', utilisateur_courant=utilisateur_courant)
+    _handle_erreur_connexion()
+    return render_template('nousContacter.html', model=model)
 
 
 @app.route('/bieres', methods=['GET'])
@@ -58,28 +61,26 @@ def bieres():
             requete = 'SELECT B.id AS id, B.nom AS bnom, S.nom AS snom, B.prix AS prix, B.ibu AS ibu, B.pourcentage_alcool AS pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id;'
             biere_dispo = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
 
+    _handle_erreur_connexion()
     return render_template('bieres.html', sortes=sortes, id_sorte=id_sorte, sous_sortes=sous_sortes,
                            id_sous_sorte=id_sous_sorte, bieresdispo=biere_dispo,
-                           utilisateur_courant=utilisateur_courant)
+                           model=model)
 
 
 @app.route('/Microbrasserie', methods=['GET'])
 def microbrasserie():
     requete = 'SELECT * FROM Microbrasserie'
     micro = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
-    return render_template("microbrasserie.html", micro=micro, utilisateur_courant=utilisateur_courant)
-
-
-@app.route('/connexion', methods=['GET'])
-def afficher_connexion():
-    return render_template('login.html', utilisateur_courant=utilisateur_courant)
+    _handle_erreur_connexion()
+    return render_template("microbrasserie.html", micro=micro, model=model)
 
 
 @app.route('/connexion', methods=['POST'])
 def connexion():
-    global utilisateur_courant
+    global model, erreur_connexion
     courriel = request.form.get('courriel')
     mot_de_passe = request.form['mot_de_passe']
+    page_courante = request.form['page_courante']
     if courriel is not None and mot_de_passe is not None and len(courriel) <= 100 and re.match(
             r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
         requete = 'SELECT id_utilisateur, mot_de_passe FROM Mot_de_passe WHERE id_utilisateur IN (SELECT id FROM Utilisateur WHERE courriel=%s);'
@@ -88,12 +89,13 @@ def connexion():
             id_, hash_bd = row
             if hash_bd is not None and hash_bd == hashlib.sha512(mot_de_passe.encode('utf-8')).digest():
                 requete = 'SELECT nom, prenom FROM Utilisateur WHERE id=%s;'
-                utilisateur_courant = bd.execute_requete_lecture(requete, id_, obtenir_dict=True)
-                utilisateur_courant['panier'] = dict()
-                utilisateur_courant['nombre_bieres'] = 0
-                return redirect('/')
-    return render_template('login.html', message_erreur="L'adresse courriel ou le mot de passe n'est pas valide",
-                           utilisateur_courant=utilisateur_courant)
+                model['utilisateur_courant'] = bd.execute_requete_lecture(requete, id_, obtenir_dict=True)
+                model['utilisateur_courant']['panier'] = dict()
+                model['utilisateur_courant']['nombre_bieres'] = 0
+                return redirect(_redirect_to_page_courante(page_courante))
+
+    erreur_connexion = True
+    return redirect(_redirect_to_page_courante(page_courante))
 
 @app.route('/inscription', methods=['GET'])
 def afficher_signup():
@@ -129,31 +131,45 @@ def panier():
         requete = 'SELECT B.nom as bnom, B.prix as prix, M.nom as mnom, S.nom as snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id_utilisateur AND B.id = %s;'
         info = bd.execute_requete_lecture(requete, idbiere, fetchall=True, obtenir_dict=True)
         bierepanier.append(info)
-    return render_template('panier.html', utilisateur_courant=utilisateur_courant, bierepanier=bierepanier)
+    _handle_erreur_connexion()
+    return render_template('panier.html', model=model, bierepanier=bierepanier)
 
 
-@app.route('/deconnexion')
+@app.route('/deconnexion', methods=['POST'])
 def deconnexion():
-    global utilisateur_courant
-    utilisateur_courant = {}
-    return redirect('/')
+    global model
+    model['utilisateur_courant'] = {}
+    return redirect(_redirect_to_page_courante(request.form['page_courante']))
 
 
 @app.route('/ajouter-au-panier', methods=['POST'])
 def ajout_panier():
-    global utilisateur_courant
+    global model
     try:
         id_biere = int(request.form.get('id_biere'))
         quantite = int(request.form.get('quantite'))
-        if 'panier' not in utilisateur_courant.keys() or 'nombre_bieres' not in utilisateur_courant.keys():
-            utilisateur_courant['panier'] = dict()
-            utilisateur_courant['nombre_bieres'] = 0
-        utilisateur_courant['panier'].update({id_biere: quantite})
-        utilisateur_courant['nombre_bieres'] += quantite
+        if 'panier' not in model['utilisateur_courant'].keys() or 'nombre_bieres' not in model['utilisateur_courant'].keys():
+            model['utilisateur_courant']['panier'] = dict()
+            model['utilisateur_courant']['nombre_bieres'] = 0
+            model['utilisateur_courant']['panier'].update({id_biere: quantite})
+            model['utilisateur_courant']['nombre_bieres'] += quantite
     except ValueError:
         pass
     redirect_url = request.form.get('redirect_url')
     return redirect(redirect_url)
+
+
+def _handle_erreur_connexion():
+    global erreur_connexion, model
+    if erreur_connexion:
+        model['message_erreur_connexion'] = "L'adresse courriel ou le mot de passe n'est pas valide"
+        erreur_connexion = False
+    else:
+        model['message_erreur_connexion'] = ""
+
+
+def _redirect_to_page_courante(page_courante):
+    return page_courante if page_courante is not None and len(page_courante) > 0 else '/'
 
 
 if args.reset:
