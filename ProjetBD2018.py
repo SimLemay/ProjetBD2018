@@ -79,8 +79,8 @@ def microbrasserie():
 def connexion():
     global model, erreur_connexion
     courriel = request.form.get('courriel')
-    mot_de_passe = request.form['mot_de_passe']
-    page_courante = request.form['page_courante']
+    mot_de_passe = request.form.get('mot_de_passe')
+    page_courante = request.form.get('page_courante')
     if courriel is not None and mot_de_passe is not None and len(courriel) <= 100 and re.match(
             r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
         requete = 'SELECT id_utilisateur, mot_de_passe FROM Mot_de_passe WHERE id_utilisateur IN (SELECT id FROM Utilisateur WHERE courriel=%s);'
@@ -90,7 +90,7 @@ def connexion():
             if hash_bd is not None and hash_bd == hashlib.sha512(mot_de_passe.encode('utf-8')).digest():
                 requete = 'SELECT nom, prenom FROM Utilisateur WHERE id=%s;'
                 model['utilisateur_courant'] = bd.execute_requete_lecture(requete, id_, obtenir_dict=True)
-                model['utilisateur_courant']['panier'] = list()
+                model['utilisateur_courant']['panier'] = list()-
                 model['utilisateur_courant']['nombre_bieres'] = 0
                 return redirect(_redirect_to_page_courante(page_courante))
 
@@ -108,7 +108,7 @@ def panier():
 def deconnexion():
     global model
     model['utilisateur_courant'] = {}
-    return redirect(_redirect_to_page_courante(request.form['page_courante']))
+    return redirect(_redirect_to_page_courante(request.form.get('page_courante')))
 
 
 @app.route('/ajouter-au-panier', methods=['POST'])
