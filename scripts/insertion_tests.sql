@@ -26,10 +26,10 @@ INSERT INTO Microbrasserie VALUES (5, 'Brasserie Auval', 'Val d\'Espoir', 2016, 
 INSERT INTO Utilisateur (courriel, nom, prenom) VALUES ('simon@test.ca', 'Lemay-Lauziere', 'Simon');
 INSERT INTO Utilisateur (courriel, nom, prenom) VALUES ('keven@ulaval.ca', 'Lamontagne', 'Keven');
 -- Simon : test
-INSERT INTO Mot_de_passe (id_utilisateur, mot_de_passe) VALUES (1,
+INSERT INTO Mot_de_passe (id_utilisateur, mot_de_passe) VALUES (6,
                                                                 X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
 -- Keven : ulaval
-INSERT INTO Mot_de_passe (id_utilisateur, mot_de_passe) VALUES (2,
+INSERT INTO Mot_de_passe (id_utilisateur, mot_de_passe) VALUES (7,
                                                                 X'5c75dc48fdb6b2b3a8349899fd7963b9c043e7dffe720368ff2ef16dbd45afcb50869585671fa9d270ea411ee83b86dd8701f7a9eb986095e5f9a4305c8e2015');
 
 -- Création des sortes de bières selon CraftBeer.com
