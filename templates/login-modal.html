@@ -1,21 +1,19 @@
-{% extends "base.html" %}
-
-{% block titre %}Connexion{% endblock %}
-
-{% block head %}
-    {{ super() }}
-    <link rel="stylesheet" id="bootstrap-css" href="../static/css/login.css">
-{% endblock %}
-
-{% block container %}
-    <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6">
-            <form id="connexion_form" method="post" action="/connexion">
+<div class="modal fade" id="modal-connexion" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Quebec Micro - Connexion</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form class="connexion-form" method="post" action="/connexion">
+                <input type="hidden" class="page-courante" name="page_courante">
                 <div class="row">
-                    <div class="col-12 mt-5">
-                        {% if message_erreur %}
-                            <label style="color: red">{{ message_erreur }}</label>
+                    <div class="col-12 mt-2">
+                        {% if model['message_erreur_connexion'] %}
+                            <label id="message-erreur-connexion" style="color: red">{{ model['message_erreur_connexion'] }}</label>
                         {% endif %}
                     </div>
                 </div>
@@ -36,7 +34,7 @@
                         <button class="btn btn-default btn-block bouton-connexion" type="submit">Login</button>
                     </div>
                 </div>
-                <div class="row mb-5">
+                <div class="row mb-2">
                     <div class="col-6">
                         <a href="#">Mot de passe oublié</a>
                     </div>
@@ -45,12 +43,7 @@
                     </div>
                 </div>
             </form>
-        </div>
-        <div class="col-lg-3"></div>
+      </div>
     </div>
-{% endblock %}
-
-{% block scripts %}
-    {{ super() }}
-    <script src="../static/js/login.js"></script>
-{% endblock %}
+  </div>
+</div>

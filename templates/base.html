@@ -4,7 +4,8 @@
     {% block head %}
         <meta charset="UTF-8">
         <title>{% block titre %}{% endblock %} - Quebec Micro</title>
-        <link rel="stylesheet" id="bootstrap-css" href="../static/css/base.css">
+        <link rel="stylesheet" href="../static/css/base.css">
+        <link rel="stylesheet" href="../static/css/login.css">
     {% endblock %}
 </head>
 <body>
@@ -29,18 +30,38 @@
                 <li id="bouton-contacter" class="nav-item">
                     <a class="nav-link" href="/nousContacter">Nous contacter</a>
                 </li>
-                <li id="bouton-panier" class="nav-item" )>
+                <li id="bouton-panier" class="nav-item">
                     <a class="nav-link" href="#"><i
-                            class="fa fa-fw fa-shopping-cart"></i>{{ '(' + utilisateur_courant['nombre_bieres']|string + ') Panier' if utilisateur_courant.get('nombre_bieres', 0) > 0 else "Panier" }}
+                            class="fa fa-fw fa-shopping-cart"></i>{{ '(' + model['utilisateur_courant']['nombre_bieres']|string + ') Panier' if model['utilisateur_courant'].get('nombre_bieres', 0) > 0 else "Panier" }}
                     </a>
                 </li>
-                <li id="bouton-connexion" class="nav-item">
-                    <a class="nav-link" href="/connexion"><i class="fa fa-fw fa-user"></i>Connexion</a>
-                </li>
+                {% if model['utilisateur_courant'].get('prenom', None) is none %}
+                    <li id="bouton-connexion" class="nav-item" style="cursor: pointer">
+                        <a class="nav-link" data-toggle="modal" data-target="#modal-connexion"><i
+                                class="fa fa-fw fa-sign-in"></i>Connexion</a>
+                    </li>
+                {% else %}
+                    <li id="bouton-connexion" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><i
+                                class="fa fa-fw fa-user"></i>{{ ' Bienvenue ' + model['utilisateur_courant']['prenom'] + '!' }}
+                        </a>
+                        <div class="dropdown-menu" style="width: 100%">
+                            <form class="connexion-form" method="post" action="/deconnexion">
+
+                                <input type="hidden" class="page-courante" name="page_courante">
+                                <button class="dropdown-item" type="submit" style="cursor: pointer">
+                                    <i class="fa fa-fw fa-sign-out"></i>Déconnexion
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
+
+{% include 'login-modal.html' %}
 
 <div class="container">{% block container %}{% endblock %}</div>
 
@@ -53,6 +74,7 @@
 
 {% block scripts %}
     <script src="../static/dist/bundle.js"></script>
+    <script src="../static/js/login.js"></script>
 {% endblock %}
 
 </body>
