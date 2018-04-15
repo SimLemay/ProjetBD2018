@@ -24,6 +24,11 @@
                 <li id="bouton-bieres" class="nav-item">
                     <a class="nav-link" href="/bieres">Bieres</a>
                 </li>
+                {% if model['utilisateur_courant']['est_une_microbrasserie'] %}
+                    <li id="bouton-ajout-biere" class="nav-item">
+                        <a class="nav-link" href="/ajout-biere">Ajouter une bière</a>
+                    </li>
+                {% endif %}
                 <li id="bouton-micros" class="nav-item">
                     <a class="nav-link" href="/Microbrasserie">Microbrasseries</a>
                 </li>
