@@ -18,9 +18,12 @@
             </div>
             <div class="form-group">
                 <form role="form" action="/ajout-biere" method="post" enctype="multipart/form-data">
-                    {% if model['message_erreur_upload'] %}
-                        <label id="message-erreur-upload"
-                               style="color: red">{{ model['message_erreur_upload'] }}</label>
+                    {% if model['message_erreur'] %}
+                        <label id="message-erreur"
+                               style="color: red">{{ model['message_erreur'] }}</label>
+                    {% endif %}
+                    {% if model['message_reussite'] %}
+                        <label style="color: green">{{ model['message_reussite'] }}</label>
                     {% endif %}
                     <div class="form-group">
                         <label for="nom">
