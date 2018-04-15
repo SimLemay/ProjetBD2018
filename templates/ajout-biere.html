@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block titre %}Ajout d'une nouvelle bière{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    {#
+    <link rel="stylesheet" id="bootstrap-css" href="../static/css/ajout-biere.css">
+#}
+{% endblock %}
+
+{% block container %}
+    <div class="row my-1">
+        <div class="col">
+            <div class="form-group">
+                <h3>Ajouter une nouvelle bière</h3>
+                <p>Remplisser le formulaire ci-dessous:</p>
+            </div>
+            <div class="form-group">
+                <form role="form" action="/ajout-biere" method="post" enctype="multipart/form-data">
+                    {% if model['message_erreur_upload'] %}
+                        <label id="message-erreur-upload"
+                               style="color: red">{{ model['message_erreur_upload'] }}</label>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="nom">
+                            <span class="label-text">Nom:</span>
+                        </label>
+                        <input type="text" id="nom" name="nom" placeholder="Nom" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">
+                            <span class="label-text">Description:</span>
+                        </label>
+                        <input type="text" id="description" name="description" placeholder="Description"
+                               class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="prix">
+                            <span class="label-text">Prix:</span>
+                        </label>
+                        <input type="number" id="prix" name="prix" step="0.01" min="1.00" max="50.00"
+                               class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="ibu">
+                            <span class="label-text">IBU:</span>
+                        </label>
+                        <input type="number" id="ibu" name="ibu" min="0" max="120" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="alcool">
+                            <span class="label-text">Pourcentage d'alcool</span>
+                        </label>
+                        <input type="number" id="alcool" name="alcool" step="0.5" min="0" max="30" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="annee">
+                            <span class="label-text">Ammée de production</span>
+                        </label>
+                        <input type="number" id="annee" name="annee" step="1" min="2000"
+                               max="{{ model['current_year'] }}"
+                               value="{{ model['current_year'] }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="image">
+                            <span class="label-text">Image (5 Mo maximum)</span>
+                        </label>
+                        <input type="file" id="image" name="image">
+                    </div>
+                    <div class="form-group">
+                        <label for="selecteur-sous-sortes">
+                            <span class="label-text">Sorte de bière</span>
+                        </label>
+                        <select id="selecteur-sous-sortes" name="id_sous_sorte">
+                            {% for sous_sorte in model['sous_sortes'] %}
+                                <option value="{{ sous_sorte.id }}">{{ sous_sorte.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn bouton">Ajouter la bière</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/ajout-biere.js"></script>
+{% endblock %}

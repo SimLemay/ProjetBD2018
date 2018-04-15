@@ -13,7 +13,7 @@ body {
     padding-left: 8px !important;
 }
 
-.nav-item:hover {
+.nav-item:hover, .bouton:hover {
     background-color: #247700;
 }
 
@@ -21,8 +21,10 @@ body {
     color: white !important;
 }
 
-.nav-item.active {
+.nav-item.active, .bouton {
     background-color: #132600;
+    color: white;
+
 }
 
 .nav-item.active:hover > .nav-link {

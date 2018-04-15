@@ -2,11 +2,6 @@
 
 {% block titre %}Nous Contacter{% endblock %}
 
-{% block head %}
-    {{ super() }}
-    <link rel="stylesheet" id="bootstrap-css" href="../static/css/bieres.css">
-{% endblock %}
-
 {% block container %}
     <div class="row my-1">
         <div class="col">
@@ -15,33 +10,33 @@
                 <p>Remplisser le formulaire ci-dessous:</p>
             </div>
             <div class="form-group">
-                <form role="form" action="/nousContacter" method="get">
+                <form role="form" action="/nous-contacter" method="post">
                     <div class="form-group">
-                        <label name="nom">
+                        <label for="nom">
                             <span class="label-text">Nom:</span>
                         </label>
                         <input type="text" name="name" placeholder="Votre nom..." class="form-control">
                     </div>
                     <div class="form-group">
-                        <label name="email">
+                        <label for="email">
                             <span class="label-text">Email:</span>
                         </label>
                         <input type="text" name="email" placeholder="Votre adresse email..." class="form-control">
                     </div>
                     <div class="form-group">
-                        <label name="sujet">
+                        <label for="sujet">
                             <span class="label-text">Sujet:</span>
                         </label>
                         <input type="text" name="sujet" placeholder="Le sujet du message..." class="form-control">
                     </div>
                     <div class="form-group">
-                        <label name="message">
+                        <label for="message">
                             <span class="label-text">Message:</span>
                         </label>
                         <textarea name="message" placeholder="Le texte de votre message..."
                                   class="form-control"></textarea>
                     </div>
-                    <button type="submit" class="btn">Envoyer le message</button>
+                    <button type="submit" class="btn bouton">Envoyer le message</button>
                 </form>
             </div>
         </div>
@@ -51,5 +46,5 @@
 
 {% block scripts %}
     {{ super() }}
-    <script src="../static/js/nouscontacter.js"></script>
+    <script src="../static/js/nous-contacter.js"></script>
 {% endblock %}
