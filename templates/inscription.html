@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block titre %}Connexion{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" id="bootstrap-css" href="../static/css/inscription.css">
+{% endblock %}
+
+{% block container %}
+
+    <div class="row main">
+        <div class="main-login main-center">
+            <form class="form-horizontal" method="post" action="/inscription">
+                <h1> Inscription</h1>
+
+                <div class="form-group">
+                    <label for="prenom" class="cols-sm-2 control-label">Votre prénom</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="prenom" id="prenom"  placeholder="Entrer votre nom"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nom" class="cols-sm-2 control-label">Votre nom de famille</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="nom" id="nom"  placeholder="Entrer votre nom de famille"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="email" class="cols-sm-2 control-label">Votre courriel</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="courriel" id="email"  placeholder="Entrer votre courriel"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="motdepasse" class="cols-sm-2 control-label">Mot de passe</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                            <input type="password" class="form-control" name="motdepasse" id="motdepasse"  placeholder="Entrer votre mot de passe"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmation" class="cols-sm-2 control-label">Confirmer votre mot de passe</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                            <input type="password" class="form-control" name="confirmation" id="confirmation"  placeholder="Confirmer votre mot de passe"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block login-button">S'inscire</button>
+                </div>
+                <div class="login-register">
+                    <a href="/connexion">Login</a>
+                    <div>
+                        {% if message_erreur %}
+                        <label> {{ message_erreur }}</label>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/inscription.js"></script>
+{% endblock %}
