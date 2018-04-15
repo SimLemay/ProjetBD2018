@@ -34,11 +34,13 @@
                 <li id="bouton-contacter" class="nav-item">
                     <a class="nav-link" href="/nous-contacter">Nous contacter</a>
                 </li>
-                <li id="bouton-panier" class="nav-item">
-                    <a class="nav-link" href="/panier"><i
-                            class="fa fa-fw fa-shopping-cart"></i>{{ '(' + model['utilisateur_courant']['nombre_bieres']|string + ') Panier' if model['utilisateur_courant'].get('nombre_bieres', 0) > 0 else "Panier" }}
-                    </a>
-                </li>
+                {% if model['utilisateur_courant'].get('panier', None) is not none %}
+                    <li id="bouton-panier" class="nav-item">
+                        <a class="nav-link" href="/panier"><i
+                                class="fa fa-fw fa-shopping-cart"></i>{{ '(' + model['utilisateur_courant']['nombre_bieres']|string + ') Panier' if model['utilisateur_courant'].get('nombre_bieres', 0) > 0 else "Panier" }}
+                        </a>
+                    </li>
+                {% endif %}
                 {% if model['utilisateur_courant'].get('prenom', None) is none %}
                     <li id="bouton-inscription" class="nav-item">
                         <a class="nav-link" href="/inscription"><i class="fa fa-fw fa-user"></i>S'inscrire</a>

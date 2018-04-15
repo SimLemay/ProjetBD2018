@@ -239,18 +239,46 @@ def signup():
             bd.execute_requete_ecriture(ajout_mdp, hash_bd)
             return redirect('/')
 
-    return render_template('inscription.html', message_erreur= 'Le courriel est déjà utilisé ou les mots de passes ne concordent pas')
+    return render_template('inscription.html', message_erreur='Le courriel est déjà utilisé ou les mots de passes ne concordent pas')
 
 
 @app.route('/panier')
 def panier():
-    bierepanier = list()
-    for idbiere in model['utilisateur_courant'].keys():
-        requete = 'SELECT B.nom as bnom, B.prix as prix, M.nom as mnom, S.nom as snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id_utilisateur AND B.id = %s;'
-        info = bd.execute_requete_lecture(requete, idbiere, fetchall=True, obtenir_dict=True)
-        bierepanier.append(info)
+    if 'panier' in model['utilisateur_courant']:
+        requete = 'SELECT B.id, B.image_url, B.nom as bnom, B.prix as prix, M.nom as mnom, S.nom as snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id_utilisateur AND B.id IN ({});'
+        id_bieres = str([id_ for id_ in model['utilisateur_courant']['panier'].keys()])[1:-1]
+        bieres = bd.execute_requete_lecture(requete.format(id_bieres), fetchall=True, obtenir_dict=True)
+        panier_biere = {}
+        for biere in bieres:
+            id_ = biere.pop('id')
+            panier_biere[id_] = biere
+
+        total_panier = 0
+        for id_ in model['utilisateur_courant']['panier'].keys():
+            model['utilisateur_courant']['panier'][id_].update(panier_biere[id_])
+            total_panier += model['utilisateur_courant']['panier'][id_]['prix'] * model['utilisateur_courant']['panier'][id_]['quantite']
+        model['total_panier'] = total_panier
+        print(model['utilisateur_courant']['panier'])
+
     _handle_erreur_connexion()
-    return render_template('panier.html', model=model, bierepanier=bierepanier)
+    return render_template('panier.html', model=model)
+
+
+@app.route('/update-panier')
+def update_panier():
+    global model
+    quantite_ = request.args.get('quantite')
+    id_biere_ = request.args.get('id_biere')
+    try:
+        quantite = int(quantite_)
+        id_biere = int(id_biere_)
+        if quantite == 0:
+            del model['utilisateur_courant']['panier'][id_biere]
+        else:
+            model['utilisateur_courant']['panier'][id_biere]['quantite'] = quantite
+    except ValueError:
+        pass
+    return redirect('/panier')
 
 
 @app.route('/deconnexion', methods=['POST'])
@@ -269,7 +297,10 @@ def ajout_panier():
         if 'panier' not in model['utilisateur_courant'].keys() or 'nombre_bieres' not in model['utilisateur_courant'].keys():
             model['utilisateur_courant']['panier'] = dict()
             model['utilisateur_courant']['nombre_bieres'] = 0
-        model['utilisateur_courant']['panier'][id_biere] = model['utilisateur_courant']['panier'].get(id_biere, 0) + quantite
+        if id_biere not in model['utilisateur_courant']['panier']:
+            model['utilisateur_courant']['panier'][id_biere] = {'quantite': quantite}
+        else:
+            model['utilisateur_courant']['panier'][id_biere]['quantite'] += quantite
         model['utilisateur_courant']['nombre_bieres'] += quantite
     except ValueError:
         pass
