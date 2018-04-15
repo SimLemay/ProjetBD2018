@@ -25,6 +25,16 @@ INSERT INTO Microbrasserie VALUES (5, 'Brasserie Auval', 'Val d\'Espoir', 2016, 
 -- Creation des utilisateurs de tests
 INSERT INTO Utilisateur (courriel, nom, prenom) VALUES ('simon@test.ca', 'Lemay-Lauziere', 'Simon');
 INSERT INTO Utilisateur (courriel, nom, prenom) VALUES ('keven@ulaval.ca', 'Lamontagne', 'Keven');
+
+INSERT INTO Mot_de_passe (mot_de_passe) VALUES (X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
+INSERT INTO Mot_de_passe (mot_de_passe) VALUES (X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
+INSERT INTO Mot_de_passe (mot_de_passe) VALUES (X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
+INSERT INTO Mot_de_passe (mot_de_passe) VALUES (X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
+INSERT INTO Mot_de_passe (mot_de_passe) VALUES (X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
+
+
+
+
 -- Simon : test
 INSERT INTO Mot_de_passe (mot_de_passe) VALUES (X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
 -- Keven : ulaval

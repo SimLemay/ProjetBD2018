@@ -27,6 +27,14 @@ def nousContacter():
     return render_template('nousContacter.html', model=model)
 
 
+@app.route('/ajout-biere', methods=['GET'])
+def ajout_biere():
+    if not model['utilisateur_courant']['est_une_microbrasserie']:
+        return redirect('/')
+    _handle_erreur_connexion()
+    return render_template('nousContacter.html', model=model)
+
+
 @app.route('/bieres', methods=['GET'])
 def bieres():
     requete = 'SELECT id, nom FROM Sorte WHERE id NOT IN (SELECT id_sorte_enfant FROM Type_de);'
@@ -92,6 +100,8 @@ def connexion():
                 model['utilisateur_courant'] = bd.execute_requete_lecture(requete, id_, obtenir_dict=True)
                 model['utilisateur_courant']['panier'] = dict()
                 model['utilisateur_courant']['nombre_bieres'] = 0
+                requete = 'SELECT id_utilisateur FROM Microbrasserie WHERE id_utilisateur=%s'
+                model['utilisateur_courant']['est_une_microbrasserie'] = bd.execute_requete_lecture(requete, id_) is not None
                 return redirect(_redirect_to_page_courante(page_courante))
 
     erreur_connexion = True
@@ -178,4 +188,4 @@ if args.reset:
     bd.execute_script_insertion('scripts/insertion_tests.sql')
     print("La BD et les tables ont ete correctement generees")
 elif __name__ == '__main__':
-    app.run(debug=True, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))
+    app.run(debug=True, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))  # host='0.0.0.0'
