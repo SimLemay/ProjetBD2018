@@ -2,11 +2,6 @@
 
 {% block titre %}Accueil{% endblock %}
 
-{% block head %}
-    {{ super() }}
-    <link rel="stylesheet" id="bootstrap-css" href="../static/css/accueil.css">
-{% endblock %}
-
 {% block container %}
     {% if model['utilisateur_courant'].prenom %}
         <h1>Hello {{ model['utilisateur_courant'].prenom }}!</h1>

@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
         <title>{% block titre %}{% endblock %} - Quebec Micro</title>
         <link rel="stylesheet" href="../static/css/base.css">
-        <link rel="stylesheet" href="../static/css/login.css">
     {% endblock %}
 </head>
 <body>
@@ -33,17 +32,17 @@
                     <a class="nav-link" href="/Microbrasserie">Microbrasseries</a>
                 </li>
                 <li id="bouton-contacter" class="nav-item">
-                    <a class="nav-link" href="/nousContacter">Nous contacter</a>
+                    <a class="nav-link" href="/nous-contacter">Nous contacter</a>
                 </li>
                 <li id="bouton-panier" class="nav-item">
                     <a class="nav-link" href="/panier"><i
                             class="fa fa-fw fa-shopping-cart"></i>{{ '(' + model['utilisateur_courant']['nombre_bieres']|string + ') Panier' if model['utilisateur_courant'].get('nombre_bieres', 0) > 0 else "Panier" }}
                     </a>
                 </li>
-                <li id="bouton-inscription" class="nav-item">
-                    <a class="nav-link" href="/inscription"><i class="fa fa-fw fa-user"></i>S'inscrire</a>
-                </li>
                 {% if model['utilisateur_courant'].get('prenom', None) is none %}
+                    <li id="bouton-inscription" class="nav-item">
+                        <a class="nav-link" href="/inscription"><i class="fa fa-fw fa-user"></i>S'inscrire</a>
+                    </li>
                     <li id="bouton-connexion" class="nav-item" style="cursor: pointer">
                         <a class="nav-link" data-toggle="modal" data-target="#modal-connexion"><i
                                 class="fa fa-fw fa-sign-in"></i>Connexion</a>
