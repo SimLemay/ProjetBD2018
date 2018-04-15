@@ -221,8 +221,16 @@ def signup():
     prenom = request.form.get('prenom')
     nom = request.form.get('nom')
     courriel = request.form.get('courriel')
+    ville = request.form.get('ville')
+    age = request.form.get('age')
+    telephone = request.form.get('telephone')
+    adresse = request.form.get('adresse')
     mot_de_passe = request.form.get('motdepasse')
     confirmation = request.form.get('confirmation')
+    nom_micro = request.form.get('nommicro')
+    emplacement = request.form.get('emplacement')
+    annee = request.form.get('annee')
+    role = 'Acheteur'
 
     if courriel is not None and len(courriel) <= 100 and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
         requete = 'SELECT id FROM Utilisateur WHERE courriel = %s;'
@@ -231,13 +239,22 @@ def signup():
         return render_template('inscription.html', message_erreur="L'adresse courriel est invalide")
 
     if not courrielexiste:
-        if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom):
+        if nom_micro is not None:
+            role = 'Vendeur'
+        if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$', ville) and re.match(r'[0-9]+$', age) and re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
             hash_bd = hashlib.sha512(mot_de_passe.encode('utf-8')).digest()
-            ajout = 'INSERT INTO Utilisateur (courriel, nom, prenom) VALUES (%s, %s, %s);'
-            bd.execute_requete_ecriture(ajout, (courriel, nom, prenom))
+            ajout = 'INSERT INTO Utilisateur (role, ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);'
+            bd.execute_requete_ecriture(ajout, (role, ville, nom, age, adresse, telephone, courriel, prenom))
             ajout_mdp = 'INSERT INTO Mot_de_passe (mot_de_passe) VALUES (%s);'
             bd.execute_requete_ecriture(ajout_mdp, hash_bd)
             return redirect('/')
+
+            if nom_micro is not None and emplacement is not None and annee is not None:
+               requete = 'SELECT nom FROM Utilisateur WHERE nom=%s;'
+               micro_existe = bd.execute_requete_lecture(requete, nom_micro)
+               if micro_existe is None:
+                        
+        elif nom_micro is not None and emplacement is not None
 
     return render_template('inscription.html', message_erreur= 'Le courriel est déjà utilisé ou les mots de passes ne concordent pas')
 
