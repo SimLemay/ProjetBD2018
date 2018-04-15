@@ -40,7 +40,7 @@
                             class="fa fa-fw fa-shopping-cart"></i>{{ '(' + model['utilisateur_courant']['nombre_bieres']|string + ') Panier' if model['utilisateur_courant'].get('nombre_bieres', 0) > 0 else "Panier" }}
                     </a>
                 </li>
-                <li id="bouton-inscription" clas="nav-item">
+                <li id="bouton-inscription" class="nav-item">
                     <a class="nav-link" href="/inscription"><i class="fa fa-fw fa-user"></i>S'inscrire</a>
                 </li>
                 {% if model['utilisateur_courant'].get('prenom', None) is none %}
@@ -83,6 +83,7 @@
 {% block scripts %}
     <script src="../static/dist/bundle.js"></script>
     <script src="../static/js/login.js"></script>
+
 {% endblock %}
 
 </body>
