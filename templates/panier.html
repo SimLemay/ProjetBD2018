@@ -10,6 +10,9 @@
 {% endblock %}
 
 {% block container %}
+    {% if model['message_erreur'] %}
+        <h4 style="color: red">{{ model['message_erreur'] }}</h4>
+    {% endif %}
     <table id="cart" class="table table-hover table-condensed">
         <thead>
         <tr>
@@ -59,9 +62,10 @@
         <tr>
             <td><a href="/bieres" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continuer à magasiner</a>
             </td>
-            <td colspan="2" class="hidden-xs text-center"><strong>Bières: {{ model['utilisateur_courant']['nombre_bieres'] }}</strong></td>
+            <td colspan="2" class="hidden-xs text-center">
+                <strong>Bières: {{ model['utilisateur_courant']['nombre_bieres'] }}</strong></td>
             <td class="hidden-xs text-center"><strong>Total: {{ model['total_panier'] }} $</strong></td>
-            <td><a href="#" class="btn btn-success btn-block">Passer à la caisse <i class="fa fa-angle-right"></i></a>
+            <td><a href="/checkout-panier" class="btn btn-success btn-block">Passer la commande <i class="fa fa-angle-right"></i></a>
             </td>
         </tr>
         </tfoot>

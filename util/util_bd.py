@@ -32,7 +32,7 @@ def execute_requete_lecture(requete, *args, fetchall=False, obtenir_dict=False):
 def execute_requete_ecriture(requete, *args):
     conn, cursor = open_connection_and_cursor()
     try:
-        cursor.execute(requete, *args)
+        cursor.execute(requete, args)
         conn.commit()
     except Exception as e:
         print(e)
