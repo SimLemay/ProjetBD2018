@@ -32,10 +32,8 @@ def uploaded_file(filename):
 
 @app.route('/')
 def accueil():
-    requete = 'SELECT id, nom From Biere'
-    bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
     _handle_erreur_connexion()
-    return render_template('accueil.html', bieres=bieres, model=model)
+    return render_template('accueil.html', model=model)
 
 
 @app.route('/nous-contacter', methods=['GET'])
@@ -54,7 +52,8 @@ def ajout_biere():
     global model
     model['message_erreur'] = ""
 
-    if 'est_une_microbrasserie' not in model['utilisateur_courant'].keys() or not model['utilisateur_courant']['est_une_microbrasserie']:
+    if 'est_une_microbrasserie' not in model['utilisateur_courant'].keys() or not model['utilisateur_courant'][
+        'est_une_microbrasserie']:
         return redirect('/')
 
     now = datetime.datetime.now()
@@ -124,7 +123,8 @@ def ajout_biere_post():
                 id_microbrasserie = model['utilisateur_courant']['id']
                 date_ajout = datetime.datetime.now().strftime('%Y-%m-%d')
                 requete = 'INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
-                bd.execute_requete_ecriture(requete, (path, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte))
+                bd.execute_requete_ecriture(requete, path, prix, nom, pourcentage_alcool, ibu, annee_production,
+                                            description, id_microbrasserie, date_ajout, id_sorte)
                 model['message_reussite'] = "La bière a été importé avec succès"
                 return render_template('ajout-biere.html', model=model)
 
@@ -199,11 +199,14 @@ def connexion():
             id_, hash_bd = row
             if hash_bd is not None and hash_bd == hashlib.sha512(mot_de_passe.encode('utf-8')).digest():
                 requete = 'SELECT nom, prenom, id FROM Utilisateur WHERE id=%s;'
-                model['utilisateur_courant'] = bd.execute_requete_lecture(requete, id_, obtenir_dict=True)
-                model['utilisateur_courant']['panier'] = dict()
-                model['utilisateur_courant']['nombre_bieres'] = 0
+                model['utilisateur_courant'].update(bd.execute_requete_lecture(requete, id_, obtenir_dict=True))
+                if 'panier' not in model['utilisateur_courant'].keys() or 'nombre_bieres' not in model[
+                    'utilisateur_courant'].keys():
+                    model['utilisateur_courant']['panier'] = dict()
+                    model['utilisateur_courant']['nombre_bieres'] = 0
                 requete = 'SELECT id_utilisateur FROM Microbrasserie WHERE id_utilisateur=%s'
-                model['utilisateur_courant']['est_une_microbrasserie'] = bd.execute_requete_lecture(requete, id_) is not None
+                model['utilisateur_courant']['est_une_microbrasserie'] = bd.execute_requete_lecture(requete,
+                                                                                                    id_) is not None
                 return redirect(_redirect_to_page_courante(page_courante))
 
     erreur_connexion = True
@@ -239,6 +242,7 @@ def signup():
         return render_template('inscription.html', message_erreur="L'adresse courriel est invalide")
 
     if not courrielexiste:
+
         if nom_micro:
             role = 'Vendeur'
         if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$', ville) and re.match(r'[0-9]+$', age) and re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
@@ -263,13 +267,46 @@ def signup():
 
 @app.route('/panier')
 def panier():
-    bierepanier = list()
-    for idbiere in model['utilisateur_courant'].keys():
-        requete = 'SELECT B.nom as bnom, B.prix as prix, M.nom as mnom, S.nom as snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id_utilisateur AND B.id = %s;'
-        info = bd.execute_requete_lecture(requete, idbiere, fetchall=True, obtenir_dict=True)
-        bierepanier.append(info)
+    global model
     _handle_erreur_connexion()
-    return render_template('panier.html', model=model, bierepanier=bierepanier)
+    if 'id' in model['utilisateur_courant']:
+        model['message_erreur'] = ""
+    if 'panier' in model['utilisateur_courant']:
+        id_bieres = str([id_ for id_ in model['utilisateur_courant']['panier'].keys()])[1:-1]
+        requete = 'SELECT B.id, B.image_url, B.nom AS bnom, B.prix AS prix, M.nom AS mnom, S.nom AS snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id_utilisateur AND B.id IN (' + id_bieres + ');'
+        bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
+        panier_biere = {}
+        for biere in bieres:
+            id_ = biere.pop('id')
+            panier_biere[id_] = biere
+
+        total_panier = 0
+        for id_ in model['utilisateur_courant']['panier'].keys():
+            model['utilisateur_courant']['panier'][id_].update(panier_biere[id_])
+            total_panier += model['utilisateur_courant']['panier'][id_]['prix'] * \
+                            model['utilisateur_courant']['panier'][id_]['quantite']
+        model['total_panier'] = total_panier
+        return render_template('panier.html', model=model)
+    return redirect('/bieres')
+
+
+@app.route('/update-panier')
+def update_panier():
+    global model
+    quantite_ = request.args.get('quantite')
+    id_biere_ = request.args.get('id_biere')
+    try:
+        quantite = int(quantite_)
+        id_biere = int(id_biere_)
+        if quantite == 0:
+            del model['utilisateur_courant']['panier'][id_biere]
+            if len(model['utilisateur_courant']['panier']) == 0:
+                return redirect('/bieres')
+        else:
+            model['utilisateur_courant']['panier'][id_biere]['quantite'] = quantite
+    except ValueError:
+        pass
+    return redirect('/panier')
 
 
 @app.route('/deconnexion', methods=['POST'])
@@ -288,11 +325,33 @@ def ajout_panier():
         if 'panier' not in model['utilisateur_courant'].keys() or 'nombre_bieres' not in model['utilisateur_courant'].keys():
             model['utilisateur_courant']['panier'] = dict()
             model['utilisateur_courant']['nombre_bieres'] = 0
-        model['utilisateur_courant']['panier'][id_biere] = model['utilisateur_courant']['panier'].get(id_biere, 0) + quantite
+        if id_biere not in model['utilisateur_courant']['panier']:
+            model['utilisateur_courant']['panier'][id_biere] = {'quantite': quantite}
+        else:
+            model['utilisateur_courant']['panier'][id_biere]['quantite'] += quantite
         model['utilisateur_courant']['nombre_bieres'] += quantite
     except ValueError:
         pass
     return redirect(_redirect_to_page_courante(request.form.get('redirect_url')))
+
+
+@app.route('/checkout-panier')
+def checkout_panier():
+    if 'panier' not in model['utilisateur_courant']:
+        return redirect('/bieres')
+    if 'id' in model['utilisateur_courant']:
+        id_acheteur = model['utilisateur_courant']['id']
+        date_achat = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        for id_biere, info in model['utilisateur_courant']['panier'].items():
+            quantite = info['quantite']
+            requete = 'INSERT INTO Achete(id_acheteur, id_biere, quantite, date_achat) VALUES (%s, %s, %s, %s)'
+            bd.execute_requete_ecriture(requete, id_acheteur, id_biere, quantite, date_achat)
+
+        model['message_reussite'] = "Votre commande a bien été passée. Vous recevrez vos bières sous peu"
+        return render_template('accueil.html', model=model)
+    else:
+        model['message_erreur'] = "Vous devez vous connecter avant de passer une commande"
+        return redirect('/panier')
 
 
 def _allowed_file(filename):

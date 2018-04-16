@@ -4,19 +4,18 @@
 
 {% block container %}
     {% if model['utilisateur_courant'].prenom %}
-        <h1>Hello {{ model['utilisateur_courant'].prenom }}!</h1>
+        <h1>Bonjour {{ model['utilisateur_courant'].prenom }}!</h1>
         <a href="/deconnexion">Deconnexion</a>
 
     {% else %}
-        <h1>Hello, World!</h1>
+        <h1>Bonjour cher visiteur!</h1>
         <a href="/connexion">Connexion</a>
     {% endif %}
 
-    {% for biere in bieres %}
-        <li><h2>{{ biere.id }}</h2>{{ biere.nom }}
-            {% else %}
-        <li><em>Aucune biere a presenter</em>
-    {% endfor %}
+    {% if model['message_reussite'] %}
+        <h3 style="color: green">{{ model['message_reussite'] }}</h3>
+    {% endif %}
+
 {% endblock %}
 
 {% block scripts %}
