@@ -239,7 +239,7 @@ def signup():
         return render_template('inscription.html', message_erreur="L'adresse courriel est invalide")
 
     if not courrielexiste:
-        if nom_micro is not None:
+        if nom_micro:
             role = 'Vendeur'
         if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$', ville) and re.match(r'[0-9]+$', age) and re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
             hash_bd = hashlib.sha512(mot_de_passe.encode('utf-8')).digest()
@@ -249,14 +249,16 @@ def signup():
             bd.execute_requete_ecriture(ajout_mdp, hash_bd)
             return redirect('/')
 
-            if nom_micro is not None and emplacement is not None and annee is not None:
-               requete = 'SELECT nom FROM Utilisateur WHERE nom=%s;'
-               micro_existe = bd.execute_requete_lecture(requete, nom_micro)
-               if micro_existe is None:
-                        
-        elif nom_micro is not None and emplacement is not None
+        if nom_micro is not None and emplacement is not None and annee is not None:
+            requete = 'SELECT nom FROM Utilisateur WHERE nom=%s;'
+            micro_existe = bd.execute_requete_lecture(requete, nom_micro)
+            if micro_existe is None:
+                requete1 = 'SELECT id FROM Utilisateur WHERE courriel = %s'
+                idu = bd.execute_requete_lecture(requete1, courriel)
+                ajout1 = 'INSERT INTO Microbrasserie (id_utilisateur, nom, emplacement, annee_inauguration) VALUES (%s, %s, %s, %s);'
+                bd.execute_requete_ecriture(ajout1, (idu, nom_micro, emplacement, annee))
 
-    return render_template('inscription.html', message_erreur= 'Le courriel est déjà utilisé ou les mots de passes ne concordent pas')
+    return render_template('inscription.html', message_erreur= 'Le courriel est déjà utilisé ou les mots de passes ne concordent pas', model=model)
 
 
 @app.route('/panier')
