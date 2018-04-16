@@ -32,9 +32,17 @@ def uploaded_file(filename):
 
 @app.route('/')
 def accueil():
+    global model
     _handle_erreur_connexion()
+    model['message_reussite'] = ""
     return render_template('accueil.html', model=model)
 
+
+@app.route('/mot-de-passe-oublie')
+def mot_de_passe_oublie():
+    global model
+    model['message_reussite'] = 'Un courriel vous a été envoyé avec un lien pour récupérer votre compte.'
+    return render_template('accueil.html', model=model)
 
 @app.route('/nous-contacter', methods=['GET'])
 def nous_contacter():
@@ -248,7 +256,7 @@ def signup():
         if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$', ville) and re.match(r'[0-9]+$', age) and re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
             hash_bd = hashlib.sha512(mot_de_passe.encode('utf-8')).digest()
             ajout = 'INSERT INTO Utilisateur (role, ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);'
-            bd.execute_requete_ecriture(ajout, (role, ville, nom, age, adresse, telephone, courriel, prenom))
+            bd.execute_requete_ecriture(ajout, role, ville, nom, age, adresse, telephone, courriel, prenom)
             ajout_mdp = 'INSERT INTO Mot_de_passe (mot_de_passe) VALUES (%s);'
             bd.execute_requete_ecriture(ajout_mdp, hash_bd)
             return redirect('/')
@@ -348,6 +356,8 @@ def checkout_panier():
             bd.execute_requete_ecriture(requete, id_acheteur, id_biere, quantite, date_achat)
 
         model['message_reussite'] = "Votre commande a bien été passée. Vous recevrez vos bières sous peu"
+        model['utilisateur_courant']['panier'] = dict()
+        model['utilisateur_courant']['nombre_bieres'] = 0
         return render_template('accueil.html', model=model)
     else:
         model['message_erreur'] = "Vous devez vous connecter avant de passer une commande"
