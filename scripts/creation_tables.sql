@@ -59,7 +59,7 @@ CREATE TABLE Achete (
   id_biere    INTEGER NOT NULL REFERENCES Biere (id),
   quantite    INTEGER NOT NULL,
   date_achat  TIMESTAMP,
-  PRIMARY KEY (id_acheteur, id_biere)
+  PRIMARY KEY (id_acheteur, id_biere, date_achat)
 );
 
 CREATE TABLE Type_de (
