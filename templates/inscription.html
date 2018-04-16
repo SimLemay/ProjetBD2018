@@ -13,7 +13,12 @@
         <div class="col">
             <div class="form-group">
                 <h3>Inscrivez-vous</h3>
-                <p>Remplisser le formulaire ci-dessous:</p>
+                <p style="text-decoration: underline">Remplisser le formulaire ci-dessous:</p>
+                <div>
+                    {% if message_erreur %}
+                        <label style="color: red"> {{ message_erreur }}</label>
+                    {% endif %}
+                </div>
             </div>
             <div class="form-group">
                 <form role="form" action="/inscription" method="post">
@@ -33,7 +38,8 @@
                         <label id="email">
                             <span class="label-text">Courriel:</span>
                         </label>
-                        <input type="email" name="courriel" placeholder="Entrez votre adresse courriel" class="form-control">
+                        <input type="email" name="courriel" placeholder="Entrez votre adresse courriel"
+                               class="form-control">
                     </div>
                     <div class="form-group">
                         <label id="ville">
@@ -46,67 +52,67 @@
                             <span class="label-text">Adresse:</span>
                         </label>
                         <input type="text" name="adresse" placeholder="Etrez votre adresse"
-                                  class="form-control"/>
+                               class="form-control"/>
                     </div>
                     <div class="form-group">
                         <label id="age">
                             <span class="label-text">Âge:</span>
                         </label>
                         <input type="text" name="age" placeholder="Entrez votre âge"
-                                  class="form-control"/>
+                               class="form-control"/>
                     </div>
                     <div class="form-group">
                         <label id="telephone">
                             <span class="label-text">Téléphone:</span>
                         </label>
                         <input type="text" name="telephone" placeholder="Entrez votre téléphone"
-                                  class="form-control"/>
+                               class="form-control"/>
                     </div>
-                        <div class="form-group">
+                    <div class="form-group">
                         <label id="motdepasse">
                             <span class="label-text">Mot de passe:</span>
                         </label>
                         <input name="motdepasse" placeholder="Entrez votre mot de passe"
-                                  class="form-control" type="password"/>
+                               class="form-control" type="password"/>
                     </div>
                     <div class="form-group">
                         <label id="confirmation">
                             <span class="label-text">Confirmation du mot de passe:</span>
                         </label>
                         <input name="confirmation" placeholder="Entrez votre mot de passe"
-                                  class="form-control" type="password"/>
+                               class="form-control" type="password"/>
+                    </div>
+                    <div class="section-micro">
+                        <div>
+                            <p style="text-decoration: underline">Si vous représentez une microbrasserie, veuillez
+                                remplir les champs suivants:</p>
+                        </div>
+                        <div class="form-group">
+                            <label id="nommicro">
+                                <span class="label-text">Nom de la microbrasserie:</span>
+                            </label>
+                            <input type="text" name="nommicro" placeholder="Entrez le nom de la microbrasserie"
+                                   class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label id="emplacement">
+                                <span class="label-text">Emplacement de la microbrasserie:</span>
+                            </label>
+                            <input type="text" name="emplacement"
+                                   placeholder="Entrez l'emplacement de la microbrasserie ex:Saguenay"
+                                   class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label id="annee">
+                                <span class="label-text">Année d'inauguration:</span>
+                            </label>
+                            <input type="text" name="annee"
+                                   placeholder="Entrez l'année d'inauguration de la microbrasserie"
+                                   class="form-control"/>
+                        </div>
                     </div>
                     <div>
-                        <p>Si vous représentez une microbrasserie, veuillez remplir les champs suivants:</p>
-                    </div>
-                    <div class="form-group">
-                        <label id="nommicro">
-                            <span class="label-text">Nom de la microbrasserie:</span>
-                        </label>
-                        <input type="text" name="nommicro" placeholder="Entrez le nom de la microbrasserie"
-                                  class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                        <label id="emplacement">
-                            <span class="label-text">Emplacement de la microbrasserie:</span>
-                        </label>
-                        <input type="text" name="emplacement" placeholder="Entrez l'emplacement de la microbrasserie ex:Saguenay"
-                                  class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                        <label id="annee">
-                            <span class="label-text">Année d'inauguration:</span>
-                        </label>
-                        <input type="text" name="annee" placeholder="Entrez l'année d'inauguration de la microbrasserie"
-                                  class="form-control"/>
-                    </div>
-                    <div>
-                    <button type="submit" class="btn bouton">S'inscrire</button>
-                    </div>
-                    <div>
-                        {% if message_erreur %}
-                        <label> {{ message_erreur }}</label>
-                        {% endif %}
+                        <button type="submit" class="btn bouton">S'inscrire</button>
                     </div>
                 </form>
             </div>

@@ -247,7 +247,7 @@ def signup():
         requete = 'SELECT id FROM Utilisateur WHERE courriel = %s;'
         courrielexiste = bd.execute_requete_lecture(requete, courriel)
     else:
-        return render_template('inscription.html', message_erreur="L'adresse courriel est invalide")
+        return render_template('inscription.html', message_erreur="L'adresse courriel est invalide", model=model)
 
     if not courrielexiste:
 
