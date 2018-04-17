@@ -1,70 +1,88 @@
 CREATE TABLE Sorte (
-  id     INTEGER PRIMARY KEY,
-  aromes VARCHAR(500),
-  nom    VARCHAR(100)
+  id  INTEGER PRIMARY KEY,
+  nom VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Utilisateur (
   id        INTEGER AUTO_INCREMENT PRIMARY KEY,
-  role      VARCHAR(50),
-  ville     VARCHAR(100),
-  nom       VARCHAR(100),
-  age       INTEGER,
-  adresse   VARCHAR(200),
-  telephone CHAR(11),
-  courriel  VARCHAR(100),
-  prenom    VARCHAR(100)
+  ville     VARCHAR(100) NOT NULL,
+  nom       VARCHAR(100) NOT NULL,
+  age       INTEGER      NOT NULL,
+  adresse   VARCHAR(200) NOT NULL,
+  telephone CHAR(11)     NOT NULL,
+  courriel  VARCHAR(100) NOT NULL,
+  prenom    VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE Mot_de_passe (
-  id_utilisateur INTEGER AUTO_INCREMENT REFERENCES Utilisateur (id),
-  mot_de_passe   BINARY(64),
-  PRIMARY KEY (id_utilisateur)
+  id           INTEGER PRIMARY KEY,
+  mot_de_passe BINARY(64) NOT NULL,
+  FOREIGN KEY (id)
+  REFERENCES Utilisateur (id)
 );
 
 CREATE TABLE Acheteur (
-  id_utilisateur INTEGER NOT NULL AUTO_INCREMENT REFERENCES Utilisateur (id),
-  PRIMARY KEY (id_utilisateur)
+  id INTEGER PRIMARY KEY,
+  FOREIGN KEY (id)
+  REFERENCES Utilisateur (id)
 );
 
 CREATE TABLE Microbrasserie (
-  id_utilisateur     INTEGER NOT NULL REFERENCES Utilisateur (id),
-  nom                VARCHAR(100),
-  emplacement        VARCHAR(200),
-  annee_inauguration INTEGER,
-  cote               INTEGER,
-  PRIMARY KEY (id_utilisateur)
+  id                 INTEGER PRIMARY KEY,
+  nom                VARCHAR(100) NOT NULL,
+  emplacement        VARCHAR(200) NOT NULL,
+  annee_inauguration INTEGER      NOT NULL,
+  FOREIGN KEY (id)
+  REFERENCES Utilisateur (id)
 );
 
 CREATE TABLE Biere (
   id                 INTEGER AUTO_INCREMENT PRIMARY KEY,
-  image_url          VARCHAR(500),
-  prix               FLOAT(2),
-  nom                VARCHAR(100),
-  pourcentage_alcool FLOAT(1),
-  ibu                INTEGER,
-  annee_production   INTEGER,
-  description        VARCHAR(200),
-  id_microbrasserie  INTEGER NOT NULL,
-  date_ajout         DATE,
-  id_sorte           INTEGER NOT NULL,
+  image_url          VARCHAR(500) NOT NULL,
+  prix               FLOAT(2)     NOT NULL,
+  nom                VARCHAR(100) NOT NULL,
+  pourcentage_alcool FLOAT(1)     NOT NULL,
+  ibu                INTEGER      NOT NULL,
+  annee_production   INTEGER      NOT NULL,
+  description        VARCHAR(200) NOT NULL,
+  id_microbrasserie  INTEGER      NOT NULL,
+  date_ajout         DATE         NOT NULL,
+  id_sorte           INTEGER      NOT NULL,
+  quantite           INTEGER      NOT NULL,
   FOREIGN KEY (id_microbrasserie)
-  REFERENCES Microbrasserie (id_utilisateur),
+  REFERENCES Microbrasserie (id),
   FOREIGN KEY (id_sorte)
   REFERENCES Sorte (id)
 );
 
+CREATE TABLE Vendre (
+  id_microbrasserie INTEGER,
+  id_biere          INTEGER,
+  quantite          INTEGER NOT NULL,
+  PRIMARY KEY (id_microbrasserie, id_biere),
+  FOREIGN KEY (id_microbrasserie)
+  REFERENCES Microbrasserie (id),
+  FOREIGN KEY (id_biere)
+  REFERENCES Biere (id)
+);
+
 CREATE TABLE Achete (
-  id_acheteur INTEGER NOT NULL AUTO_INCREMENT REFERENCES Acheteur (id_utilisateur),
-  id_biere    INTEGER NOT NULL REFERENCES Biere (id),
+  id_acheteur INTEGER,
+  id_biere    INTEGER,
   quantite    INTEGER NOT NULL,
   date_achat  TIMESTAMP,
-  PRIMARY KEY (id_acheteur, id_biere, date_achat)
+  PRIMARY KEY (id_acheteur, id_biere, date_achat),
+  FOREIGN KEY (id_acheteur)
+  REFERENCES Acheteur (id),
+  FOREIGN KEY (id_biere)
+  REFERENCES Biere (id)
 );
 
 CREATE TABLE Type_de (
+  id_sorte_enfant INTEGER PRIMARY KEY,
   id_sorte_parent INTEGER NOT NULL,
-  id_sorte_enfant INTEGER NOT NULL PRIMARY KEY REFERENCES Sorte (id),
+  FOREIGN KEY (id_sorte_enfant)
+  REFERENCES Sorte (id),
   FOREIGN KEY (id_sorte_parent)
   REFERENCES Sorte (id)
 );
