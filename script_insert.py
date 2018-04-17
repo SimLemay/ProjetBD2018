@@ -1,4 +1,5 @@
 from util import util_bd as bd
+from random import randint
 
 LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam malesuada tristique ipsum, ac mollis " \
               "felis viverra sit amet. Suspendisse consectetur sit amet massa vitae fringilla. Duis a purus a nisl " \

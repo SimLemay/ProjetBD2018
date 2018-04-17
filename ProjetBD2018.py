@@ -137,15 +137,16 @@ def ajout_biere_post():
 
                 conn, cursor = bd.open_connection_and_cursor()
                 try:
-                    requete = 'INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+                    requete = 'INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);'
                     cursor.execute(requete, (path, prix, nom, pourcentage_alcool, ibu, annee_production,
-                                                description, id_microbrasserie, date_ajout, id_sorte))
-                    cursor.execute('SELECT LAST_INSERT_ID():')
+                                                description, date_ajout, id_sorte))
+                    cursor.execute('SELECT LAST_INSERT_ID();')
                     id_biere = cursor.fetchone()
                     requete = 'INSERT INTO Vendre VALUES (%s, %s, %s)'
                     cursor.execute(requete, (id_microbrasserie, id_biere, quantite))
                     conn.commit()
                 except Exception as e:
+                    print(e)
                     model['message_erreur'] = "Une erreur est survenue lors de l'ajout de la bière"
                     return render_template('ajout-biere.html', model=model)
                 bd.close_connection_and_cursor(conn, cursor)
@@ -232,6 +233,9 @@ def connexion():
                     model['utilisateur_courant']['nombre_bieres'] = 0
                 requete = 'SELECT id FROM Microbrasserie WHERE id=%s'
                 model['utilisateur_courant']['est_une_microbrasserie'] = bd.execute_requete_lecture(requete,
+                                                                                                    id_) is not None
+                requete = 'SELECT id FROM Acheteur WHERE id=%s'
+                model['utilisateur_courant']['est_un_acheteur'] = bd.execute_requete_lecture(requete,
                                                                                                     id_) is not None
                 return redirect(_redirect_to_page_courante(page_courante))
 
@@ -351,7 +355,7 @@ def panier():
         model['message_erreur'] = ""
     if 'panier' in model['utilisateur_courant']:
         id_bieres = str([id_ for id_ in model['utilisateur_courant']['panier'].keys()])[1:-1]
-        requete = 'SELECT B.id, B.image_url, B.nom AS bnom, B.prix AS prix, M.nom AS mnom, S.nom AS snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id AND B.id IN (' + id_bieres + ');'
+        requete = 'SELECT B.id, B.image_url, B.nom AS bnom, B.prix AS prix, M.nom AS mnom, S.nom AS snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND M.id IN (SELECT id_microbrasserie FROM Vendre WHERE id_biere = B.id) AND B.id IN (' + id_bieres + ');'
         print(requete)
         bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
         panier_biere = {}
@@ -420,6 +424,9 @@ def checkout_panier():
     if 'panier' not in model['utilisateur_courant']:
         return redirect('/bieres')
     if 'id' in model['utilisateur_courant']:
+        if not model['utilisateur_courant']['est_un_acheteur']:
+            model['message_erreur'] = "Vous devez etre un acheteur pour passer une commande"
+            return redirect('/panier')
         id_acheteur = model['utilisateur_courant']['id']
         date_achat = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -430,10 +437,11 @@ def checkout_panier():
                 requete = 'INSERT INTO Achete(id_acheteur, id_biere, quantite, date_achat) VALUES (%s, %s, %s, %s)'
                 cursor.execute(requete, (id_acheteur, id_biere, quantite, date_achat))
             except Exception as e:  # Il ne reste plus de biere :(
+                print(e)
                 model['message_erreur'] = "Il ne reste plus assez de bieres pour passer votre commande!"
                 conn.rollback()
                 bd.close_connection_and_cursor(conn, cursor)
-                return redirect('/panier')
+                return render_template('panier.html', model=model)
         conn.commit()
         bd.close_connection_and_cursor(conn, cursor)
         model['message_reussite'] = "Votre commande a bien été passée. Vous recevrez vos bières sous peu"

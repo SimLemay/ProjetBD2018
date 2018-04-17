@@ -25,6 +25,9 @@ INSERT INTO Microbrasserie VALUES (5, 'Brasserie Auval', 'Val d\'Espoir', 2016);
 -- Creation des utilisateurs de tests
 INSERT INTO Utilisateur (ville, nom, age, adresse, telephone, courriel, prenom) VALUES ('Quebec', 'Lemay-Lauziere', 22, 'ipsum lorem', '41893215789', 'simon@test.ca', 'Simon');
 INSERT INTO Utilisateur (ville, nom, age, adresse, telephone, courriel, prenom) VALUES ('Saguenay', 'Lamontagne', 20, 'bla bla bla', '58178351237', 'keven@ulaval.ca', 'Keven');
+INSERT INTO Acheteur VALUES (6);
+INSERT INTO Acheteur VALUES (7);
+
 
 INSERT INTO Mot_de_passe (id, mot_de_passe) VALUES (1, X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
 INSERT INTO Mot_de_passe (id, mot_de_passe) VALUES (2, X'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff');
@@ -252,57 +255,106 @@ INSERT INTO Type_de VALUES (15, 95);
 INSERT INTO Type_de VALUES (15, 96);
 
 -- Ajout de Bieres
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/1.jpg', 20.00, 'Leo\'s Early Breakfast IPA', 6.2, 54, 2018, '', 1, '2018-04-06', 30);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/2.jpg', 15.00, 'Supermoine Numéro 4', 4.5, 0, 2018, '', 1, '2018-04-06', 46);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/3.jpg', 15.00, 'Saison du Pinacle', 6.5, 52, 2018, '', 1, '2018-04-06', 16);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/4.jpg', 15.00, 'Berliner Melon Weisse', 3.9, 8, 2018, '', 1, '2018-04-06', 37);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/5.jpg', 15.00, 'LaBatt Porter Robuste', 6.0, 51, 2018, '', 1, '2018-04-06', 60);
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/1.jpg', 20.00, 'Leo\'s Early Breakfast IPA', 6.2, 54, 2018, 'Une description pas tres descriptive', '2018-04-06', 30);
+INSERT INTO Vendre VALUES (1, 1, 5);
 
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/3.jpg', 10.00, 'IPA Américaine des Appalaches', 7.0, 77, 2018, '', 2, '2018-04-06', 30);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/1.jpg', 10.00, 'La Blonde de l\'Anse', 5.0, 17, 2018, '', 2, '2018-04-06', 46);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/4.jpg', 10.00, 'Brown Ale Américaine', 7.0, 90, 2018, '', 2, '2018-04-06', 27);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/2.jpg', 10.00, 'La Bonne Aventure', 5.0, 25, 2018, '', 2, '2018-04-06', 75);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/3.jpg', 10.00, 'Gose IPA du Barachois', 3.8, 30, 2018, '', 2, '2018-04-06', 78);
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/2.jpg', 15.00, 'Supermoine Numéro 4', 4.5, 0, 2018, 'Une description pas tres descriptive', '2018-04-06', 46);
+INSERT INTO Vendre VALUES (1, 2, 5);
 
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/5.jpg', 8.00, 'Double Fruit Punch IPA', 8.0, 100, 2018, '', 3, '2018-04-06', 32);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/1.jpg', 8.00, 'Anna', 10.0, 75, 2018, '', 3, '2018-04-06', 50);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/5.jpg', 8.00, 'Vox Stout(MilkShake)', 5.5, 25, 2018, '', 3, '2018-04-06', 65);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/2.jpg', 8.00, 'Kettle Sour', 3.0, 3, 2018, '', 3, '2018-04-06', 37);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/4.jpg', 8.00, 'Vox Pop IPA', 6.5, 45, 2018, '', 3, '2018-04-06', 30);
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/3.jpg', 15.00, 'Saison du Pinacle', 6.5, 52, 2018, 'Une description pas tres descriptive', '2018-04-06', 16);
+INSERT INTO Vendre VALUES (1, 3, 5);
 
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/4.jpg', 5.00, 'La Saison du Tracteur', 6.0, 35, 2018, '', 4, '2018-04-06', 16);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/1.jpg', 5.00, 'Les Quatres Surfeurs de L\'Apocalypso', 6.5, 60, 2018, '', 4, '2018-04-06', 30);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/2.jpg', 5.00, 'La Buteuse', 10.0, 60, 2018, '', 4, '2018-04-06', 50);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/3.jpg', 5.00, 'Le Sang d\'Encre', 5.5, 45, 2018, '', 4, '2018-04-06', 66);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/5.jpg', 5.00, 'La Morsure', 6.5, 77, 2018, '', 4, '2018-04-06', 30);
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/4.jpg', 15.00, 'Berliner Melon Weisse', 3.9, 8, 2018, 'Une description pas tres descriptive', '2018-04-06', 37);
+INSERT INTO Vendre VALUES (1, 4, 5);
 
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/4.jpg', 12.00, 'Super A', 8.0, 60, 2018, '', 5, '2018-04-06', 32);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/1.jpg', 12.00, 'Saison Espinay', 6.5, 30, 2018, '', 5, '2018-04-06', 16);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/3.jpg', 12.00, 'Arrière-Pays Grisette', 4.5, 0, 2018, '', 5, '2018-04-06', 96);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/2.jpg', 12.00, 'Arcane 17 IPA', 5.2, 60, 2018, '', 5, '2018-04-06', 30);
-INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte)
-VALUES ('./images/5.jpg', 12.00, 'Guerilla SSS', 7.8, 40, 2016, '', 5, '2018-04-06', 62);
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/5.jpg', 15.00, 'LaBatt Porter Robuste', 6.0, 51, 2018, 'Une description pas tres descriptive', '2018-04-06', 60);
+INSERT INTO Vendre VALUES (3, 5, 5);
+
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/3.jpg', 10.00, 'IPA Américaine des Appalaches', 7.0, 77, 2018, 'Une description pas tres descriptive', '2018-04-06', 30);
+INSERT INTO Vendre VALUES (3, 6, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/1.jpg', 10.00, 'La Blonde de l\'Anse', 5.0, 17, 2018, 'Une description pas tres descriptive', '2018-04-06', 46);
+INSERT INTO Vendre VALUES (3, 7, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/4.jpg', 10.00, 'Brown Ale Américaine', 7.0, 90, 2018, 'Une description pas tres descriptive', '2018-04-06', 27);
+INSERT INTO Vendre VALUES (3, 8, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/2.jpg', 10.00, 'La Bonne Aventure', 5.0, 25, 2018, 'Une description pas tres descriptive', '2018-04-06', 75);
+INSERT INTO Vendre VALUES (3, 9, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/3.jpg', 10.00, 'Gose IPA du Barachois', 3.8, 30, 2018, 'Une description pas tres descriptive', '2018-04-06', 78);
+INSERT INTO Vendre VALUES (3, 10, 5);
+
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/5.jpg', 8.00, 'Double Fruit Punch IPA', 8.0, 100, 2018, 'Une description pas tres descriptive', '2018-04-06', 32);
+INSERT INTO Vendre VALUES (2, 11, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/1.jpg', 8.00, 'Anna', 10.0, 75, 2018, 'Une description pas tres descriptive', '2018-04-06', 50);
+INSERT INTO Vendre VALUES (2, 12, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/5.jpg', 8.00, 'Vox Stout(MilkShake)', 5.5, 25, 2018, 'Une description pas tres descriptive', '2018-04-06', 65);
+INSERT INTO Vendre VALUES (2, 13, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/2.jpg', 8.00, 'Kettle Sour', 3.0, 3, 2018, 'Une description pas tres descriptive', '2018-04-06', 37);
+INSERT INTO Vendre VALUES (2, 14, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/4.jpg', 8.00, 'Vox Pop IPA', 6.5, 45, 2018, 'Une description pas tres descriptive', '2018-04-06', 30);
+INSERT INTO Vendre VALUES (2, 15, 5);
+
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/4.jpg', 5.00, 'La Saison du Tracteur', 6.0, 35, 2018, 'Une description pas tres descriptive', '2018-04-06', 16);
+INSERT INTO Vendre VALUES (5, 16, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/1.jpg', 5.00, 'Les Quatres Surfeurs de L\'Apocalypso', 6.5, 60, 2018, 'Une description pas tres descriptive', '2018-04-06', 30);
+INSERT INTO Vendre VALUES (5, 17, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/2.jpg', 5.00, 'La Buteuse', 10.0, 60, 2018, 'Une description pas tres descriptive', '2018-04-06', 50);
+INSERT INTO Vendre VALUES (5, 18, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/3.jpg', 5.00, 'Le Sang d\'Encre', 5.5, 45, 2018, 'Une description pas tres descriptive', '2018-04-06', 66);
+INSERT INTO Vendre VALUES (5, 19, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/5.jpg', 5.00, 'La Morsure', 6.5, 77, 2018, 'Une description pas tres descriptive', '2018-04-06', 30);
+INSERT INTO Vendre VALUES (5, 20, 5);
+
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/4.jpg', 12.00, 'Super A', 8.0, 60, 2018, 'Une description pas tres descriptive', '2018-04-06', 32);
+INSERT INTO Vendre VALUES (4, 21, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/1.jpg', 12.00, 'Saison Espinay', 6.5, 30, 2018, 'Une description pas tres descriptive', '2018-04-06', 16);
+INSERT INTO Vendre VALUES (4, 22, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/3.jpg', 12.00, 'Arrière-Pays Grisette', 4.5, 0, 2018, 'Une description pas tres descriptive', '2018-04-06', 96);
+INSERT INTO Vendre VALUES (4, 23, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/2.jpg', 12.00, 'Arcane 17 IPA', 5.2, 60, 2018, 'Une description pas tres descriptive', '2018-04-06', 30);
+INSERT INTO Vendre VALUES (4, 24, 5);
+
+INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, date_ajout, id_sorte)
+VALUES ('./images/5.jpg', 12.00, 'Guerilla SSS', 7.8, 40, 2016, 'Une description pas tres descriptive', '2018-04-06', 62);
+INSERT INTO Vendre VALUES (4, 25, 5);
