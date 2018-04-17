@@ -9,13 +9,13 @@ mysql -u root -p < scripts/creation_bd.sql
 ```
 <lien vers l'executable python> ProjetBD2108.py --reset
 ```
-- Effectuer cette commande dans ProjetBD2018/ pour creer le trigger servant au respect des quantités:
+- Effectuer cette commande dans ProjetBD2018/ pour creer les index et les triggers
 ```
 mysql -u root -p < scripts/creation_trigger_et_index.sql
 ```
-- Lancer l'application:
+- Lancer script_insert.py pour inserer les donnees supplementaires:
 ```
-<lien vers l'executable python> ProjetBD2108.py
+<lien vers l'executable python> script_insert.py
 ```
 
 ## Installation pour le développement:
