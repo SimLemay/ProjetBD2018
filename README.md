@@ -5,7 +5,7 @@
 ```
 mysql -u root -p < scripts/creation_bd.sql
 ```
-- Lancer l'application avec l'option --reset pour creer les tables et inserer les donnees:
+- Lancer l'application avec l'option --reset pour creer les tables et inserer les premieres donnees:
 ```
 <lien vers l'executable python> ProjetBD2108.py --reset
 ```
