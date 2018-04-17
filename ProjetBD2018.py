@@ -84,6 +84,7 @@ def ajout_biere_post():
     ibu_ = request.form.get('ibu')
     annee_ = request.form.get('annee')
     id_sorte_ = request.form.get('id_sous_sorte')
+    quantite_ = request.form.get('quantite')
     try:
         if prix_ and alcool_ and ibu_ and annee_ and id_sorte_:
             prix = float(prix_)
@@ -91,6 +92,7 @@ def ajout_biere_post():
             ibu = int(ibu_)
             annee_production = int(annee_)
             id_sorte = int(id_sorte_)
+            quantite = int(quantite_)
         else:
             raise ValueError
     except ValueError:
@@ -132,9 +134,23 @@ def ajout_biere_post():
             else:  # Tout est valide
                 id_microbrasserie = model['utilisateur_courant']['id']
                 date_ajout = datetime.datetime.now().strftime('%Y-%m-%d')
-                requete = 'INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
-                bd.execute_requete_ecriture(requete, path, prix, nom, pourcentage_alcool, ibu, annee_production,
-                                            description, id_microbrasserie, date_ajout, id_sorte)
+
+                conn, cursor = bd.open_connection_and_cursor()
+                try:
+                    requete = 'INSERT INTO Biere (image_url, prix, nom, pourcentage_alcool, ibu, annee_production, description, id_microbrasserie, date_ajout, id_sorte) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+                    cursor.execute(requete, (path, prix, nom, pourcentage_alcool, ibu, annee_production,
+                                                description, id_microbrasserie, date_ajout, id_sorte))
+                    cursor.execute('SELECT LAST_INSERT_ID():')
+                    id_biere = cursor.fetchone()
+                    requete = 'INSERT INTO Vendre VALUES (%s, %s, %s)'
+                    cursor.execute(requete, (id_microbrasserie, id_biere, quantite))
+                    conn.commit()
+                except Exception as e:
+                    model['message_erreur'] = "Une erreur est survenue lors de l'ajout de la bière"
+                    return render_template('ajout-biere.html', model=model)
+                bd.close_connection_and_cursor(conn, cursor)
+
+                # La biere a été ajoutée avec succès
                 model['message_reussite'] = "La bière a été importé avec succès"
                 return render_template('ajout-biere.html', model=model)
 
@@ -234,6 +250,7 @@ def afficher_signup():
 def signup():
     model['current_year'] = datetime.datetime.now().year
 
+    # On recupere les informations du form
     prenom = request.form.get('prenom')
     nom = request.form.get('nom')
     courriel = request.form.get('courriel')
@@ -247,53 +264,79 @@ def signup():
     emplacement = request.form.get('emplacement')
     annee_ = request.form.get('annee')
 
+    # On verifie les entrees numeriques
     try:
         annee = int(annee_)
         age = int(age_)
     except ValueError:
         return render_template('inscription.html', message_erreur="Veuillez entrer des nombres valides", model=model)
 
+    # Si le couriel est valide
     if courriel is not None and len(courriel) <= 100 and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
+
+        # On vérifie si le courriel est déjà présent dans le système
         requete = 'SELECT id FROM Utilisateur WHERE courriel = %s;'
         courrielexiste = bd.execute_requete_lecture(requete, courriel)
-    else:
-        return render_template('inscription.html', message_erreur="L'adresse courriel est invalide", model=model)
+        if not courrielexiste:
 
-    if not courrielexiste:
-        if nom_micro:
-            if emplacement and annee:
-                requete = 'SELECT nom FROM Utilisateur WHERE nom=%s;'
-                micro_existe = bd.execute_requete_lecture(requete, nom_micro)
-                if micro_existe is None:
-                    requete1 = 'SELECT id FROM Utilisateur WHERE courriel = %s'
-                    idu = bd.execute_requete_lecture(requete1, courriel)
-                    ajout1 = 'INSERT INTO Microbrasserie (id, nom, emplacement, annee_inauguration) VALUES (%s, %s, %s, %s);'
-                    bd.execute_requete_ecriture(ajout1, idu, nom_micro, emplacement, annee)
+            # On valide que les mots de passes concordent
+            if mot_de_passe == confirmation:
+                if re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$', ville) and \
+                   re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
+
+                    # Si c'est une microbrasserie qui s'inscrit:
+                    if nom_micro:
+                        if emplacement and annee:
+                            requete = 'SELECT nom FROM Utilisateur WHERE nom=%s;'
+                            micro_existe = bd.execute_requete_lecture(requete, nom_micro)
+                            if micro_existe is not None:
+                                return render_template('inscription.html',
+                                                       message_erreur="Une microbrasserie portant ce nom existe deja",
+                                                       model=model)
+                        else:
+                            return render_template('inscription.html',
+                                                   message_erreur="Veuillez entrer un emplacement et une annee d'inauguration",
+                                                   model=model)
+
+                    # On insert l'utilisateur et le mot de passe
+                    conn, cursor = bd.open_connection_and_cursor()
+                    try:
+                        hash_bd = hashlib.sha512(mot_de_passe.encode('utf-8')).digest()
+                        ajout = 'INSERT INTO Utilisateur (ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s);'
+                        cursor.execute(ajout, (ville, nom, age, adresse, telephone, courriel, prenom))
+                        cursor.execute('SELECT LAST_INSERT_ID();')
+                        id_utilisateur = cursor.fetchone()
+                        ajout_mdp = 'INSERT INTO Mot_de_passe (id, mot_de_passe) VALUES (%s, %s);'
+                        cursor.execute(ajout_mdp, (id_utilisateur, hash_bd))
+
+                        # On ajoute le bon type d'utilisateur
+                        if nom_micro:
+                            ajout = 'INSERT INTO Microbrasserie (id, nom, emplacement, annee_inauguration) VALUES (%s, %s, %s, %s);'
+                            cursor.execute(ajout, (id_utilisateur, nom_micro, emplacement, annee))
+                        else:
+                            ajout = 'INSERT INTO Acheteur VALUES (%s)'
+                            cursor.execute(ajout, id_utilisateur)
+                        # On commit les inserts si tout c'est bien passé
+                        conn.commit()
+                    except Exception as e:
+                        return render_template('inscription.html',
+                                               message_erreur="Une erreur est survenue lors de l'ajout de votre utilisateur",
+                                               model=model)
+                    bd.close_connection_and_cursor(conn, cursor)
+                    if nom_micro:
+                        return render_template('inscription.html',
+                                               message_reussite='Votre compte de microbrasserie a été correctement créé. Félicitation!',
+                                               model=model)
+                    else:
+                        return render_template('inscription.html',
+                                               message_reussite='Votre compte a été correctement créé. Félicitation!',
+                                               model=model)
                 else:
                     return render_template('inscription.html',
-                                           message_erreur="Une microbrasserie portant ce nom existe deja",
+                                           message_erreur='Des caractères invalides sont présents dans les champs de saisie',
                                            model=model)
-            else:
-                return render_template('inscription.html',
-                                       message_erreur="Veuillez entrer un emplacement et une annee d'inauguration",
-                                       model=model)
-
-        if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(
-                r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$',
-                                                                                             ville) and re.match(
-                r'[0-9]+$', age) and re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
-
-            hash_bd = hashlib.sha512(mot_de_passe.encode('utf-8')).digest()
-            ajout = 'INSERT INTO Utilisateur (ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s);'
-            bd.execute_requete_ecriture(ajout, ville, nom, age, adresse, telephone, courriel, prenom)
-            ajout_mdp = 'INSERT INTO Mot_de_passe (mot_de_passe) VALUES (%s);'
-            bd.execute_requete_ecriture(ajout_mdp, hash_bd)
-
-
-            return render_template('inscription.html',
-                                   message_reussite='Votre compte a été correctement créé. Félicitation!',
-                                   model=model)
-
+    else:
+        return render_template('inscription.html', message_erreur="L'adresse courriel est invalide", model=model)
 
     return render_template('inscription.html',
                            message_erreur='Le courriel est déjà utilisé ou les mots de passes ne concordent pas',
@@ -379,11 +422,20 @@ def checkout_panier():
     if 'id' in model['utilisateur_courant']:
         id_acheteur = model['utilisateur_courant']['id']
         date_achat = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        conn, cursor = bd.open_connection_and_cursor()
         for id_biere, info in model['utilisateur_courant']['panier'].items():
             quantite = info['quantite']
-            requete = 'INSERT INTO Achete(id_acheteur, id_biere, quantite, date_achat) VALUES (%s, %s, %s, %s)'
-            bd.execute_requete_ecriture(requete, id_acheteur, id_biere, quantite, date_achat)
-
+            try:
+                requete = 'INSERT INTO Achete(id_acheteur, id_biere, quantite, date_achat) VALUES (%s, %s, %s, %s)'
+                cursor.execute(requete, (id_acheteur, id_biere, quantite, date_achat))
+            except Exception as e:  # Il ne reste plus de biere :(
+                model['message_erreur'] = "Il ne reste plus assez de bieres pour passer votre commande!"
+                conn.rollback()
+                bd.close_connection_and_cursor(conn, cursor)
+                return redirect('/panier')
+        conn.commit()
+        bd.close_connection_and_cursor(conn, cursor)
         model['message_reussite'] = "Votre commande a bien été passée. Vous recevrez vos bières sous peu"
         model['utilisateur_courant']['panier'] = dict()
         model['utilisateur_courant']['nombre_bieres'] = 0
