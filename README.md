@@ -17,6 +17,10 @@ mysql -u root -p < scripts/creation_trigger_et_index.sql
 ```
 <lien vers l'executable python> script_insert.py
 ```
+- Lancer l'application:
+```
+<lien vers l'executable python> ProjetBD2108.py
+```
 
 ## Installation pour le développement:
 - Effectuer ces commandes :
