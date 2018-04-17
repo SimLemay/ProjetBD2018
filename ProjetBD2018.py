@@ -164,6 +164,19 @@ def request_entity_too_large(error):
     return 'File Too Large', 413
 
 
+@app.route('/consulter-biere')
+def consulter_biere():
+    try:
+        id_biere = int(request.args.get("id_biere"))
+    except (ValueError, TypeError):
+        return redirect('/bieres')
+
+    requete = 'SELECT B.image_url, B.id AS id, B.nom AS bnom, S.nom AS snom, B.prix AS prix, B.ibu AS ibu, B.pourcentage_alcool AS pa FROM Biere B, Sorte S WHERE B.id_sorte = S.id AND B.id = %s;'
+    biere = bd.execute_requete_lecture(requete, id_biere, obtenir_dict=True)
+    _handle_erreur_connexion()
+    return render_template('une-biere.html', biere=biere, model=model)
+
+
 @app.route('/bieres', methods=['GET'])
 def bieres():
     requete = 'SELECT id, nom FROM Sorte WHERE id NOT IN (SELECT id_sorte_enfant FROM Type_de);'

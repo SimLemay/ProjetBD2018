@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block titre %}{{ biere.bnom }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="../static/css/bieres.css">
+{% endblock %}
+
+{% block container %}
+    <div class="row my-1 text-center">
+        <div class="col-lg-2 col-md-2 mb-4">
+            <a class="btn btn-warning" href="/bieres">Retour aux bieres</a>
+        </div>
+        <div class="col-lg-10 col-md-10 mb-4">
+            <div class="card h-100">
+                <a href="#" class="text-center"><img class="card-img-top mt-2"
+                                                     style="max-height: 350px; width: auto; margin: 0 auto"
+                                                     src="{{ biere.image_url }}" alt=""></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="#">{{ biere.bnom }}</a>
+                    </h4>
+                    <h5>{{ biere.snom }}</h5>
+                    <h6> Degré d'alcool: {{ biere.pa }}% IBU: {{ biere.ibu }}</h6>
+                    <p class="card-text"></p>
+                    <h6> {{ biere.prix }} $</h6>
+                </div>
+                <div class="card-footer">
+                    <form class="ajout-biere-panier" method="post" action="/ajouter-au-panier">
+                        <div class="row">
+                            <input type="hidden" name="id_biere" value="{{ biere.id }}">
+                            <input type="hidden" class="redirect-url" name="redirect_url">
+                            <div class="col-4 p-0 text-center">
+                                <div style="display: table; height: 100%; margin: 0 auto">
+                                    <label class="mb-0" style="display: table-cell; vertical-align: middle">Quantité
+                                        :</label>
+                                </div>
+                            </div>
+                            <div class="col-4 p-0 text-center">
+                                <input class="form-control text-center" type="number" name="quantite"
+                                       min="1" value="1">
+                            </div>
+                            <div class="col-4 p-0 text-center">
+                                <button type="submit" class="btn bouton-ajout-panier">
+                                    <i style="color: white" class="fa fa-fw fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/une-biere.js"></script>
+{% endblock %}

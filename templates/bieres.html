@@ -57,7 +57,7 @@
                             <a href="#" class="text-center"><img class="card-img-top" style="max-height: 180px; width: auto; margin: 0 auto" src="{{ biere.image_url }}" alt=""></a>
                             <div class="card-body">
                                 <h4 class="card-title">
-                                    <a href="#">{{ biere.bnom }}</a>
+                                    <a href="/consulter-biere?id_biere={{ biere.id }}">{{ biere.bnom }}</a>
                                 </h4>
                                 <h5>{{ biere.snom }}</h5>
                                 <h6> Degré d'alcool: {{ biere.pa }}% IBU: {{ biere.ibu }}</h6>
