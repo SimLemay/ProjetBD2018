@@ -11,7 +11,7 @@ mysql -u root -p < scripts/creation_bd.sql
 ```
 - Effectuer cette commande dans ProjetBD2018/ pour creer le trigger servant au respect des quantités:
 ```
-mysql -u root -p < scripts/creation_trigger.sql
+mysql -u root -p < scripts/creation_trigger_et_index.sql
 ```
 - Lancer l'application:
 ```
