@@ -45,11 +45,8 @@ CREATE TABLE Biere (
   ibu                INTEGER      NOT NULL,
   annee_production   INTEGER      NOT NULL,
   description        VARCHAR(200) NOT NULL,
-  id_microbrasserie  INTEGER      NOT NULL,
   date_ajout         DATE         NOT NULL,
   id_sorte           INTEGER      NOT NULL,
-  FOREIGN KEY (id_microbrasserie)
-  REFERENCES Microbrasserie (id),
   FOREIGN KEY (id_sorte)
   REFERENCES Sorte (id)
 );

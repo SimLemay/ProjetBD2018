@@ -14,13 +14,13 @@ for i in range(200):
     print(i)
 
 # acheteur
-conn, cursor = open_connection_and_cursor()
-    try:
-        cursor.execute('INSERT INTO Utilisateur (ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s);', (VILLES, ))
-        conn.commit()
-    except Exception as e:
-        print(e)
-    close_connection_and_cursor(conn, cursor)
+conn, cursor = bd.open_connection_and_cursor()
+try:
+    cursor.execute('INSERT INTO Utilisateur (ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s);', (VILLES, ))
+    conn.commit()
+except Exception as e:
+    print(e)
+bd.close_connection_and_cursor(conn, cursor)
 
 
 # Microbrasserie
