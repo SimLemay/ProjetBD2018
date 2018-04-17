@@ -48,7 +48,6 @@ CREATE TABLE Biere (
   id_microbrasserie  INTEGER      NOT NULL,
   date_ajout         DATE         NOT NULL,
   id_sorte           INTEGER      NOT NULL,
-  quantite           INTEGER      NOT NULL,
   FOREIGN KEY (id_microbrasserie)
   REFERENCES Microbrasserie (id),
   FOREIGN KEY (id_sorte)
@@ -79,8 +78,8 @@ CREATE TABLE Achete (
 );
 
 CREATE TABLE Type_de (
-  id_sorte_enfant INTEGER PRIMARY KEY,
   id_sorte_parent INTEGER NOT NULL,
+  id_sorte_enfant INTEGER PRIMARY KEY,
   FOREIGN KEY (id_sorte_enfant)
   REFERENCES Sorte (id),
   FOREIGN KEY (id_sorte_parent)
