@@ -19,6 +19,11 @@
                         <label style="color: red"> {{ message_erreur }}</label>
                     {% endif %}
                 </div>
+                <div>
+                    {% if message_reussite %}
+                        <label style="color: green"> {{ message_reussite }}</label>
+                    {% endif %}
+                </div>
             </div>
             <div class="form-group">
                 <form role="form" action="/inscription" method="post">
@@ -58,7 +63,7 @@
                         <label id="age">
                             <span class="label-text">Âge:</span>
                         </label>
-                        <input type="text" name="age" placeholder="Entrez votre âge"
+                        <input type="number" min="18" max="118" name="age" placeholder="Entrez votre âge"
                                class="form-control"/>
                     </div>
                     <div class="form-group">
@@ -106,7 +111,7 @@
                             <label id="annee">
                                 <span class="label-text">Année d'inauguration:</span>
                             </label>
-                            <input type="text" name="annee"
+                            <input type="number" min="1900" max="{{ model['current_year'] }}" name="annee"
                                    placeholder="Entrez l'année d'inauguration de la microbrasserie"
                                    class="form-control"/>
                         </div>

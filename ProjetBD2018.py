@@ -44,6 +44,7 @@ def mot_de_passe_oublie():
     model['message_reussite'] = 'Un courriel vous a été envoyé avec un lien pour récupérer votre compte.'
     return render_template('accueil.html', model=model)
 
+
 @app.route('/nous-contacter', methods=['GET'])
 def nous_contacter():
     _handle_erreur_connexion()
@@ -59,6 +60,7 @@ def nous_contacter_post():
 def ajout_biere():
     global model
     model['message_erreur'] = ""
+    model['message_reussite'] = ""
 
     if 'est_une_microbrasserie' not in model['utilisateur_courant'].keys() or not model['utilisateur_courant'][
         'est_une_microbrasserie']:
@@ -201,7 +203,7 @@ def connexion():
     page_courante = request.form.get('page_courante')
     if courriel is not None and mot_de_passe is not None and len(courriel) <= 100 and re.match(
             r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
-        requete = 'SELECT id_utilisateur, mot_de_passe FROM Mot_de_passe WHERE id_utilisateur IN (SELECT id FROM Utilisateur WHERE courriel=%s);'
+        requete = 'SELECT id, mot_de_passe FROM Mot_de_passe WHERE id IN (SELECT id FROM Utilisateur WHERE courriel=%s);'
         row = bd.execute_requete_lecture(requete, courriel)
         if row is not None:
             id_, hash_bd = row
@@ -212,7 +214,7 @@ def connexion():
                     'utilisateur_courant'].keys():
                     model['utilisateur_courant']['panier'] = dict()
                     model['utilisateur_courant']['nombre_bieres'] = 0
-                requete = 'SELECT id_utilisateur FROM Microbrasserie WHERE id_utilisateur=%s'
+                requete = 'SELECT id FROM Microbrasserie WHERE id=%s'
                 model['utilisateur_courant']['est_une_microbrasserie'] = bd.execute_requete_lecture(requete,
                                                                                                     id_) is not None
                 return redirect(_redirect_to_page_courante(page_courante))
@@ -224,24 +226,32 @@ def connexion():
 @app.route('/inscription', methods=['GET'])
 def afficher_signup():
     _handle_erreur_connexion()
+    model['current_year'] = datetime.datetime.now().year
     return render_template('inscription.html', model=model)
 
 
 @app.route('/inscription', methods=['POST'])
 def signup():
+    model['current_year'] = datetime.datetime.now().year
+
     prenom = request.form.get('prenom')
     nom = request.form.get('nom')
     courriel = request.form.get('courriel')
     ville = request.form.get('ville')
-    age = request.form.get('age')
+    age_ = request.form.get('age')
     telephone = request.form.get('telephone')
     adresse = request.form.get('adresse')
     mot_de_passe = request.form.get('motdepasse')
     confirmation = request.form.get('confirmation')
     nom_micro = request.form.get('nommicro')
     emplacement = request.form.get('emplacement')
-    annee = request.form.get('annee')
-    role = 'Acheteur'
+    annee_ = request.form.get('annee')
+
+    try:
+        annee = int(annee_)
+        age = int(age_)
+    except ValueError:
+        return render_template('inscription.html', message_erreur="Veuillez entrer des nombres valides", model=model)
 
     if courriel is not None and len(courriel) <= 100 and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel):
         requete = 'SELECT id FROM Utilisateur WHERE courriel = %s;'
@@ -250,27 +260,44 @@ def signup():
         return render_template('inscription.html', message_erreur="L'adresse courriel est invalide", model=model)
 
     if not courrielexiste:
-
         if nom_micro:
-            role = 'Vendeur'
-        if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$', ville) and re.match(r'[0-9]+$', age) and re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
+            if emplacement and annee:
+                requete = 'SELECT nom FROM Utilisateur WHERE nom=%s;'
+                micro_existe = bd.execute_requete_lecture(requete, nom_micro)
+                if micro_existe is None:
+                    requete1 = 'SELECT id FROM Utilisateur WHERE courriel = %s'
+                    idu = bd.execute_requete_lecture(requete1, courriel)
+                    ajout1 = 'INSERT INTO Microbrasserie (id, nom, emplacement, annee_inauguration) VALUES (%s, %s, %s, %s);'
+                    bd.execute_requete_ecriture(ajout1, idu, nom_micro, emplacement, annee)
+                else:
+                    return render_template('inscription.html',
+                                           message_erreur="Une microbrasserie portant ce nom existe deja",
+                                           model=model)
+            else:
+                return render_template('inscription.html',
+                                       message_erreur="Veuillez entrer un emplacement et une annee d'inauguration",
+                                       model=model)
+
+        if mot_de_passe == confirmation and re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", courriel) and re.match(
+                r'[a-zA-Z\s\-]+$', prenom) and re.match(r'[a-zA-Z\s\-]+$', nom) and re.match(r'[a-zA-Z\s\-]+$',
+                                                                                             ville) and re.match(
+                r'[0-9]+$', age) and re.match(r'[a-zA-Z0-9\s\-]+$', adresse) and re.match(r'[0-9\-]+$', telephone):
+
             hash_bd = hashlib.sha512(mot_de_passe.encode('utf-8')).digest()
-            ajout = 'INSERT INTO Utilisateur (role, ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);'
-            bd.execute_requete_ecriture(ajout, role, ville, nom, age, adresse, telephone, courriel, prenom)
+            ajout = 'INSERT INTO Utilisateur (ville, nom, age, adresse, telephone, courriel, prenom) VALUES (%s, %s, %s, %s, %s, %s, %s);'
+            bd.execute_requete_ecriture(ajout, ville, nom, age, adresse, telephone, courriel, prenom)
             ajout_mdp = 'INSERT INTO Mot_de_passe (mot_de_passe) VALUES (%s);'
             bd.execute_requete_ecriture(ajout_mdp, hash_bd)
-            return redirect('/')
 
-        if nom_micro is not None and emplacement is not None and annee is not None:
-            requete = 'SELECT nom FROM Utilisateur WHERE nom=%s;'
-            micro_existe = bd.execute_requete_lecture(requete, nom_micro)
-            if micro_existe is None:
-                requete1 = 'SELECT id FROM Utilisateur WHERE courriel = %s'
-                idu = bd.execute_requete_lecture(requete1, courriel)
-                ajout1 = 'INSERT INTO Microbrasserie (id_utilisateur, nom, emplacement, annee_inauguration) VALUES (%s, %s, %s, %s);'
-                bd.execute_requete_ecriture(ajout1, (idu, nom_micro, emplacement, annee))
 
-    return render_template('inscription.html', message_erreur= 'Le courriel est déjà utilisé ou les mots de passes ne concordent pas', model=model)
+            return render_template('inscription.html',
+                                   message_reussite='Votre compte a été correctement créé. Félicitation!',
+                                   model=model)
+
+
+    return render_template('inscription.html',
+                           message_erreur='Le courriel est déjà utilisé ou les mots de passes ne concordent pas',
+                           model=model)
 
 
 @app.route('/panier')
@@ -281,7 +308,8 @@ def panier():
         model['message_erreur'] = ""
     if 'panier' in model['utilisateur_courant']:
         id_bieres = str([id_ for id_ in model['utilisateur_courant']['panier'].keys()])[1:-1]
-        requete = 'SELECT B.id, B.image_url, B.nom AS bnom, B.prix AS prix, M.nom AS mnom, S.nom AS snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id_utilisateur AND B.id IN (' + id_bieres + ');'
+        requete = 'SELECT B.id, B.image_url, B.nom AS bnom, B.prix AS prix, M.nom AS mnom, S.nom AS snom FROM Biere B, Microbrasserie M, Sorte S WHERE B.id_sorte = S.id AND B.id_microbrasserie = M.id AND B.id IN (' + id_bieres + ');'
+        print(requete)
         bieres = bd.execute_requete_lecture(requete, fetchall=True, obtenir_dict=True)
         panier_biere = {}
         for biere in bieres:
@@ -330,7 +358,8 @@ def ajout_panier():
     try:
         id_biere = int(request.form.get('id_biere'))
         quantite = int(request.form.get('quantite'))
-        if 'panier' not in model['utilisateur_courant'].keys() or 'nombre_bieres' not in model['utilisateur_courant'].keys():
+        if 'panier' not in model['utilisateur_courant'].keys() or 'nombre_bieres' not in model[
+            'utilisateur_courant'].keys():
             model['utilisateur_courant']['panier'] = dict()
             model['utilisateur_courant']['nombre_bieres'] = 0
         if id_biere not in model['utilisateur_courant']['panier']:

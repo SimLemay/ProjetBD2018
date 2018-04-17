@@ -34,7 +34,7 @@
                 <li id="bouton-contacter" class="nav-item">
                     <a class="nav-link" href="/nous-contacter">Nous contacter</a>
                 </li>
-                {% if model['utilisateur_courant'].get('panier', None) is not none %}
+                {% if model['utilisateur_courant'].get('panier', None) is not none and model['utilisateur_courant']['panier'].keys()|length > 0 %}
                     <li id="bouton-panier" class="nav-item">
                         <a class="nav-link" href="/panier"><i
                                 class="fa fa-fw fa-shopping-cart"></i>{{ '(' + model['utilisateur_courant']['nombre_bieres']|string + ') Panier' if model['utilisateur_courant'].get('nombre_bieres', 0) > 0 else "Panier" }}

@@ -10,7 +10,7 @@ CREATE TABLE Utilisateur (
   age       INTEGER      NOT NULL,
   adresse   VARCHAR(200) NOT NULL,
   telephone CHAR(11)     NOT NULL,
-  courriel  VARCHAR(100) NOT NULL,
+  courriel  VARCHAR(100) NOT NULL UNIQUE,
   prenom    VARCHAR(100) NOT NULL
 );
 
@@ -29,7 +29,7 @@ CREATE TABLE Acheteur (
 
 CREATE TABLE Microbrasserie (
   id                 INTEGER PRIMARY KEY,
-  nom                VARCHAR(100) NOT NULL,
+  nom                VARCHAR(100) NOT NULL UNIQUE,
   emplacement        VARCHAR(200) NOT NULL,
   annee_inauguration INTEGER      NOT NULL,
   FOREIGN KEY (id)
